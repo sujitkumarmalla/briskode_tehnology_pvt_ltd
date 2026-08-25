@@ -1,0 +1,10 @@
+{
+  "name": "hospictal-management-system",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --prefix hospictal_front",
+    "build": "npm run build --prefix hospictal_front",
+    "preview": "npm run preview --prefix hospictal_front"
+  }
+}

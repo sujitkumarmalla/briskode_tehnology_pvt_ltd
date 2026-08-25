@@ -1,0 +1,62 @@
+export const doctorsData = [
+  {
+    id: "dr-kapoor",
+    name: "Dr. Arvind Kapoor",
+    specialty: "Cardiologist",
+    department: "Cardiology",
+    experience: "22 Years",
+    rating: "4.9",
+    education: "MBBS, MD, DM (Cardiology)",
+    bio: "Dr. Arvind Kapoor is a renowned expert in interventional cardiology, specializing in complex angioplasties, pacemaker implantations, and preventive cardiac care. He has successfully treated thousands of patients over his distinguished career.",
+    image: "/images/dr_kapoor.jpg",
+    availability: ["Monday", "Wednesday", "Friday"],
+    slots: ["09:00 AM - 12:00 PM", "02:00 PM - 05:00 PM"],
+    email: "arvind.kapoor@capitalpublicseva.com",
+    phone: "+91 98765 00101"
+  },
+  {
+    id: "dr-mehta",
+    name: "Dr. Ananya Mehta",
+    specialty: "Neurologist",
+    department: "Neurology",
+    experience: "15 Years",
+    rating: "4.8",
+    education: "MBBS, MD, DM (Neurology)",
+    bio: "Dr. Ananya Mehta specializes in neurodegenerative disorders, epilepsy management, stroke care, and pediatric neurology. She is committed to offering evidence-based therapeutic treatments with a compassionate approach.",
+    image: "/images/dr_mehta.jpg",
+    availability: ["Tuesday", "Thursday", "Saturday"],
+    slots: ["10:00 AM - 01:00 PM", "03:00 PM - 06:00 PM"],
+    email: "ananya.mehta@capitalpublicseva.com",
+    phone: "+91 98765 00102"
+  },
+  {
+    id: "dr-reddy",
+    name: "Dr. Preeti Reddy",
+    specialty: "Pediatrician",
+    department: "Pediatrics",
+    experience: "10 Years",
+    rating: "4.9",
+    education: "MBBS, MD (Pediatrics), DCH",
+    bio: "Dr. Preeti Reddy is a dedicated pediatrician focused on infant nutrition, child development, immunization, and treating acute pediatric illnesses. Her warm personality makes clinic visits stress-free for kids.",
+    image: "/images/dr_reddy.jpg",
+    availability: ["Monday", "Tuesday", "Thursday", "Friday"],
+    slots: ["09:00 AM - 11:30 AM", "04:00 PM - 07:00 PM"],
+    email: "preeti.reddy@capitalpublicseva.com",
+    phone: "+91 98765 00103"
+  },
+  {
+    id: "dr-verma",
+    name: "Dr. Vikram Verma",
+    specialty: "Orthopedic Surgeon",
+    department: "Orthopedics",
+    experience: "14 Years",
+    rating: "4.7",
+    education: "MBBS, MS (Orthopedics), M.Ch",
+    bio: "Dr. Vikram Verma is an expert in joint replacement surgery, sports medicine, arthroscopy, and complex trauma management. He employs advanced minimally invasive surgical techniques for faster patient recovery.",
+    image: "/images/dr_verma.jpg",
+    availability: ["Wednesday", "Thursday", "Saturday"],
+    slots: ["11:00 AM - 02:00 PM", "05:00 PM - 08:00 PM"],
+    email: "vikram.verma@capitalpublicseva.com",
+    phone: "+91 98765 00104"
+  }
+];
