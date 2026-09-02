@@ -28,15 +28,18 @@ export const CustomerAccountsModule = () => {
 
   return (
     <div className="max-w-6xl mx-auto space-y-6 pb-12">
-      {/* Banner */}
-      <div className="glass-card-green p-6 rounded-2xl flex items-center justify-between">
+      {/* Banner / Total Balance Card with linear-gradient(135deg, #1478F2, #0D5FC4) */}
+      <div 
+        className="p-6 rounded-2xl flex items-center justify-between text-white shadow-xl"
+        style={{ background: 'linear-gradient(135deg, #1478F2, #0D5FC4)' }}
+      >
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-lightgreen-400/20 border border-lightgreen-400/40 flex items-center justify-center text-lightgreen-400">
+          <div className="w-12 h-12 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center text-white backdrop-blur-md">
             <FileText className="w-7 h-7" />
           </div>
           <div>
             <h2 className="text-2xl font-extrabold text-white">{t('myAccounts')}</h2>
-            <p className="text-xs text-slate-300">Account No: <span className="font-mono text-white font-bold">{user?.accountNo}</span> • IFSC: <span className="font-mono text-lightgreen-400 font-bold">{user?.ifscCode}</span></p>
+            <p className="text-xs text-blue-100">Account No: <span className="font-mono text-white font-bold">{user?.accountNo}</span> • IFSC: <span className="font-mono text-white font-bold">{user?.ifscCode}</span></p>
           </div>
         </div>
 
@@ -44,24 +47,24 @@ export const CustomerAccountsModule = () => {
           {!isBalanceUnlocked ? (
             <button
               onClick={() => setShowOtpModal(true)}
-              className="green-btn px-4 py-2.5 rounded-xl text-xs flex items-center gap-2"
+              className="white-btn px-4 py-2.5 rounded-xl text-xs flex items-center gap-2 shadow-md"
             >
-              <Lock className="w-4 h-4" /> {t('unlockBalance')}
+              <Lock className="w-4 h-4 text-[#1478F2]" /> {t('unlockBalance')}
             </button>
           ) : (
             <button
               onClick={() => setIsBalanceUnlocked(false)}
-              className="px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 border border-slate-700 flex items-center gap-2"
+              className="px-4 py-2.5 rounded-xl text-xs font-bold bg-white/20 text-white border border-white/30 hover:bg-white/30 flex items-center gap-2"
             >
-              <EyeOff className="w-4 h-4 text-emerald-400" /> {t('hideBalance')}
+              <EyeOff className="w-4 h-4 text-white" /> {t('hideBalance')}
             </button>
           )}
         </div>
       </div>
 
       {downloadMsg && (
-        <div className="p-4 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4" /> {downloadMsg}
+        <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold flex items-center gap-2">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600" /> {downloadMsg}
         </div>
       )}
 
@@ -72,16 +75,18 @@ export const CustomerAccountsModule = () => {
             key={acc.accountNo}
             onClick={() => setSelectedAcc(acc.accountNo)}
             className={`p-5 rounded-2xl border cursor-pointer transition-all ${
-              selectedAcc === acc.accountNo ? 'bg-slate-900 border-lightgreen-400/80 shadow-lg' : 'bg-slate-950/80 border-slate-800'
+              selectedAcc === acc.accountNo 
+                ? 'bg-white border-[#1478F2] ring-2 ring-[#1478F2]/30 shadow-lg' 
+                : 'bg-white border-[#E5EAF1] hover:border-[#1478F2]/40 shadow-sm'
             }`}
           >
-            <div className="text-xs text-slate-400 font-bold uppercase">{acc.type}</div>
-            <div className="text-2xl font-extrabold text-white font-mono mt-1">
+            <div className="text-xs text-[#6B7280] font-bold uppercase">{acc.type}</div>
+            <div className="text-2xl font-extrabold text-[#111827] font-mono mt-1">
               {isBalanceUnlocked ? `₹${acc.balance.toLocaleString('en-IN')}` : '₹••••••••'}
             </div>
-            <div className="text-[11px] text-slate-400 mt-2 font-mono flex items-center justify-between">
+            <div className="text-[11px] text-[#6B7280] mt-2 font-mono flex items-center justify-between">
               <span>No: {acc.accountNo}</span>
-              <span className="text-lightgreen-400 font-bold">{acc.status}</span>
+              <span className="text-[#1478F2] font-bold">{acc.status}</span>
             </div>
           </div>
         ))}
@@ -89,10 +94,10 @@ export const CustomerAccountsModule = () => {
 
       {/* Ledger Table */}
       <div className="glass-card p-6 rounded-2xl space-y-4">
-        <div className="flex justify-between items-center border-b border-slate-800 pb-3">
-          <h3 className="text-sm font-bold text-white">{t('myAccounts')} ({selectedAcc})</h3>
+        <div className="flex justify-between items-center border-b border-[#E5EAF1] pb-3">
+          <h3 className="text-sm font-bold text-[#111827]">{t('myAccounts')} ({selectedAcc})</h3>
           <div className="flex gap-2">
-            <button onClick={() => handleDownload('PDF')} className="white-btn px-3 py-1.5 rounded-lg text-xs flex items-center gap-1">
+            <button onClick={() => handleDownload('PDF')} className="blue-btn px-3 py-1.5 rounded-lg text-xs flex items-center gap-1">
               <Download className="w-3.5 h-3.5" /> PDF
             </button>
             <button onClick={() => handleDownload('CSV')} className="grey-btn px-3 py-1.5 rounded-lg text-xs flex items-center gap-1">
@@ -102,8 +107,8 @@ export const CustomerAccountsModule = () => {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-slate-300">
-            <thead className="bg-slate-950 text-slate-400 uppercase font-bold text-[11px]">
+          <table className="w-full text-left text-xs text-[#111827]">
+            <thead className="bg-[#F6F9FD] text-[#6B7280] uppercase font-bold text-[11px]">
               <tr>
                 <th className="p-3">Ref ID</th>
                 <th className="p-3">Date</th>
@@ -113,23 +118,23 @@ export const CustomerAccountsModule = () => {
                 <th className="p-3 text-right">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800 font-mono">
+            <tbody className="divide-y divide-[#E5EAF1] font-mono">
               {statementData.map(row => (
-                <tr key={row.id} className="hover:bg-slate-800/40">
-                  <td className="p-3 text-white font-bold">{row.id}</td>
-                  <td className="p-3 text-slate-400">{row.date}</td>
-                  <td className="p-3 font-sans text-white">{row.desc}</td>
+                <tr key={row.id} className="hover:bg-[#F6F9FD]">
+                  <td className="p-3 text-[#1478F2] font-bold">{row.id}</td>
+                  <td className="p-3 text-[#6B7280]">{row.date}</td>
+                  <td className="p-3 font-sans text-[#111827]">{row.desc}</td>
                   <td className="p-3 font-sans">
                     <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                      row.type === 'CR' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-red-500/20 text-red-300 border border-red-500/30'
+                      row.type === 'CR' ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 'bg-red-100 text-red-700 border border-red-200'
                     }`}>
                       {row.type}
                     </span>
                   </td>
-                  <td className={`p-3 text-right font-bold ${row.type === 'CR' ? 'text-emerald-400' : 'text-slate-200'}`}>
+                  <td className={`p-3 text-right font-bold ${row.type === 'CR' ? 'text-[#22C55E]' : 'text-[#111827]'}`}>
                     {row.type === 'CR' ? '+' : '-'}₹{row.amount.toLocaleString('en-IN')}
                   </td>
-                  <td className="p-3 text-right font-sans text-emerald-400 font-bold">{row.status}</td>
+                  <td className="p-3 text-right font-sans text-[#22C55E] font-bold">{row.status}</td>
                 </tr>
               ))}
             </tbody>

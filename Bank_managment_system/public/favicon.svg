@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="apexGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1478F2" />
+      <stop offset="100%" stop-color="#0D5FC4" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+  </defs>
+  <!-- Background Rounded Card -->
+  <rect x="32" y="32" width="448" height="448" rx="112" fill="url(#apexGrad)" />
+  
+  <!-- Outer Shield Accent Outline -->
+  <path d="M256 96 L384 144 V264 C384 348 328 408 256 432 C184 408 128 348 128 264 V144 L256 96 Z" fill="none" stroke="#FFFFFF" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" opacity="0.3" />
+
+  <!-- Bank Temple Pillars & Pedestal -->
+  <path d="M256 128 L352 192 H160 L256 128 Z" fill="#FFFFFF" />
+  
+  <rect x="176" y="216" width="28" height="112" rx="6" fill="#FFFFFF" />
+  <rect x="228" y="216" width="28" height="112" rx="6" fill="#FFFFFF" />
+  <rect x="280" y="216" width="28" height="112" rx="6" fill="#FFFFFF" />
+  <rect x="332" y="216" width="28" height="112" rx="6" fill="#FFFFFF" />
+  
+  <rect x="152" y="344" width="208" height="24" rx="8" fill="#FFFFFF" />
+  
+  <!-- Golden Star Accent -->
+  <path d="M256 148 L261 164 H278 L264 174 L269 190 L256 180 L243 190 L248 174 L234 164 H251 Z" fill="url(#goldGrad)" />
+</svg>

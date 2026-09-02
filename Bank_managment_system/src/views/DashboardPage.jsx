@@ -74,17 +74,17 @@ export const DashboardPage = ({ onReturnHome }) => {
   };
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-[#6E6E6E] text-slate-100">
+    <div className="flex flex-col md:flex-row h-screen w-screen overflow-hidden bg-[#EBF0F5] text-[#0F172A]">
       {/* Fixed Responsive Sidebar */}
       <Sidebar activeModule={activeModule} setActiveModule={setActiveModule} />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col h-full overflow-y-auto bg-gradient-to-b from-[#6E6E6E] via-[#0F172A] to-[#6E6E6E]">
+      <div className="flex-1 flex flex-col h-full overflow-y-auto bg-[#EBF0F5] max-w-full overflow-x-hidden">
         {/* Sticky Header */}
         <Header activeModule={activeModule} onReturnHome={onReturnHome} onRoleChange={(r) => setActiveModule(getDefaultModuleForRole(r))} />
 
         {/* Dynamic Module View */}
-        <main className="flex-1 p-8">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeModule}

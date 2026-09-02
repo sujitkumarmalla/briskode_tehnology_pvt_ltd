@@ -7,6 +7,20 @@ export default {
   theme: {
     extend: {
       colors: {
+        apex: {
+          primary: '#1478F2',
+          dark: '#0D5FC4',
+          sidebar: '#0968D7',
+          light: '#EAF4FF',
+          bg: '#EBF0F5',
+          card: '#FFFFFF',
+          textMain: '#0F172A',
+          textSub: '#475569',
+          border: '#D1D5DB',
+          success: '#22C55E',
+          warning: '#F59E0B',
+          danger: '#EF4444'
+        },
         dimgrey: {
           300: '#A3A3A3',
           400: '#8E8E8E',

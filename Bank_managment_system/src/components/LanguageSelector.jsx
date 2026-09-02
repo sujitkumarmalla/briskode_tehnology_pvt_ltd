@@ -6,16 +6,16 @@ export const LanguageSelector = () => {
   const { currentLang, setCurrentLang } = useAuth();
 
   return (
-    <div className="flex items-center gap-1.5 bg-slate-950/80 px-3 py-1.5 rounded-xl border border-slate-700 text-xs">
-      <Globe className="w-3.5 h-3.5 text-lightgreen-400" />
-      <span className="text-[11px] font-bold text-slate-400 hidden sm:inline">Lang:</span>
+    <div className="flex items-center gap-1.5 bg-[#F6F9FD] px-3 py-1.5 rounded-xl border border-[#E5EAF1] text-xs shadow-sm">
+      <Globe className="w-3.5 h-3.5 text-[#1478F2]" />
+      <span className="text-[11px] font-bold text-[#6B7280] hidden sm:inline">Lang:</span>
       <select
         value={currentLang}
         onChange={(e) => setCurrentLang(e.target.value)}
-        className="bg-transparent text-white font-bold focus:outline-none cursor-pointer text-xs"
+        className="bg-transparent text-[#111827] font-bold focus:outline-none cursor-pointer text-xs"
       >
         {LANGUAGES.map(l => (
-          <option key={l.code} value={l.code} className="bg-slate-900 text-white">
+          <option key={l.code} value={l.code} className="bg-white text-[#111827]">
             {l.native} ({l.name})
           </option>
         ))}

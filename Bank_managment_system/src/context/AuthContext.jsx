@@ -20,8 +20,60 @@ export const LANGUAGES = [
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentLang, setCurrentLang] = useState('en');
+  const [dynamicTranslations, setDynamicTranslations] = useState({});
 
-  const t = (key) => getTranslation(currentLang, key);
+  const translateApi = async (text) => {
+    if (!text || currentLang === 'en') return text;
+    const dictResult = getTranslation(currentLang, text);
+    if (dictResult && dictResult !== text) return dictResult;
+
+    const cacheKey = `${currentLang}:${text}`;
+    if (dynamicTranslations[cacheKey]) return dynamicTranslations[cacheKey];
+
+    try {
+      // 1. Try Google Translate GTX public endpoint (clean, high rate limits, no warning strings)
+      const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${currentLang}&dt=t&q=${encodeURIComponent(text)}`);
+      const data = await res.json();
+      if (data && data[0] && Array.isArray(data[0])) {
+        const translated = data[0].map(item => item[0]).join('');
+        if (translated && !translated.toUpperCase().includes('MYMEMORY') && !translated.toUpperCase().includes('WARNING:')) {
+          setDynamicTranslations(prev => ({ ...prev, [cacheKey]: translated }));
+          return translated;
+        }
+      }
+    } catch (e) {
+      // Fallback to MyMemory only if clean
+      try {
+        const res2 = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|${currentLang}`);
+        const data2 = await res2.json();
+        if (data2?.responseData?.translatedText) {
+          const trans = data2.responseData.translatedText;
+          if (trans && !trans.toUpperCase().includes('MYMEMORY') && !trans.toUpperCase().includes('WARNING:')) {
+            setDynamicTranslations(prev => ({ ...prev, [cacheKey]: trans }));
+            return trans;
+          }
+        }
+      } catch (err) {}
+    }
+    return text;
+  };
+
+  const t = (key, defaultText) => {
+    const dictResult = getTranslation(currentLang, key);
+    if (dictResult && dictResult !== key) return dictResult;
+    const targetText = defaultText || key;
+    if (currentLang === 'en') return targetText;
+    
+    const cacheKey = `${currentLang}:${targetText}`;
+    const cached = dynamicTranslations[cacheKey];
+    if (cached && !cached.toUpperCase().includes('MYMEMORY') && !cached.toUpperCase().includes('WARNING:')) {
+      return cached;
+    }
+    
+    // Trigger background API translation if missing
+    translateApi(targetText);
+    return targetText;
+  };
 
   const [user, setUser] = useState({
     id: 'u3',
