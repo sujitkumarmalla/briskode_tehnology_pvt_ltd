@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { sendContactMessage } from "../../services/api";
+import { toast } from "react-toastify";
 
 function ContactForm() {
   const [formData, setFormData] = useState({
@@ -19,7 +20,9 @@ function ContactForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) {
-      setStatus({ loading: false, success: false, error: "Please fill in all required fields." });
+      const errMsg = "Validation Error: Please fill in all required fields (Name, Email, Message).";
+      setStatus({ loading: false, success: false, error: errMsg });
+      toast.error(errMsg);
       return;
     }
 
@@ -28,9 +31,12 @@ function ContactForm() {
     try {
       await sendContactMessage(formData);
       setStatus({ loading: false, success: true, error: "" });
+      toast.success("Message sent successfully! Our desk will get back to you.");
     } catch (err) {
       console.error("Contact submission error:", err);
-      setStatus({ loading: false, success: false, error: "Failed to send message. Please try WhatsApp directly." });
+      const errMsg = "Failed to send message. Please try again.";
+      setStatus({ loading: false, success: false, error: errMsg });
+      toast.error(errMsg);
     }
   };
 

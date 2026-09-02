@@ -11,6 +11,9 @@ import AppointmentPage from "../pages/AppointmentPage";
 import ContactPage from "../pages/ContactPage";
 import FAQPage from "../pages/FAQPage";
 import GalleryPage from "../pages/GalleryPage";
+import LoginPage from "../pages/LoginPage";
+import AdminDashboardPage from "../pages/AdminDashboardPage";
+import ProtectedAdminRoute from "../components/ProtectedAdminRoute";
 import NotFoundPage from "../pages/NotFoundPage";
 
 function AppRoutes() {
@@ -27,6 +30,15 @@ function AppRoutes() {
       <Route path="/gallery" element={<GalleryPage />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/faq" element={<FAQPage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route
+        path="/admin"
+        element={
+          <ProtectedAdminRoute>
+            <AdminDashboardPage />
+          </ProtectedAdminRoute>
+        }
+      />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );

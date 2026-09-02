@@ -1,11 +1,32 @@
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
 import NotFoundPage from "./NotFoundPage";
-import { doctors } from "../data/doctors";
+import { doctors as defaultDoctors } from "../data/doctors";
+import { fetchDoctors } from "../services/api";
 
 function DoctorDetailsPage() {
   const { id } = useParams();
-  const doctor = doctors.find((d) => String(d.id) === String(id));
+  const [doctorsList, setDoctorsList] = useState(defaultDoctors);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadDoctors = async () => {
+      try {
+        const res = await fetchDoctors();
+        if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
+          setDoctorsList(res.data);
+        }
+      } catch (err) {
+        console.error("Error fetching doctor details from MongoDB database:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadDoctors();
+  }, []);
+
+  const doctor = doctorsList.find((d) => String(d.id) === String(id) || String(d._id) === String(id));
 
   if (!doctor) {
     return <NotFoundPage message="The requested doctor profile could not be found." />;

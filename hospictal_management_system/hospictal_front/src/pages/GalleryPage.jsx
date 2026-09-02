@@ -13,18 +13,25 @@ function GalleryPage() {
     <div className="pt-24 pb-16 bg-slate-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
-        {/* Header Title */}
-        <div className="text-center max-w-3xl mx-auto space-y-2">
-          <span className="text-emerald-700 font-extrabold text-[11px] uppercase tracking-widest bg-emerald-100/70 px-3 py-1 rounded-full border border-emerald-200">
-            Hospital Clinical Gallery
-          </span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900">
+      <section className="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden bg-slate-900 text-white shadow-2xl mb-8">
+        {/* Bright High-Visibility Blurred Hospital Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center filter blur-[2px] scale-105 opacity-90 transition-all"
+          style={{ backgroundImage: `url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=1600')` }}
+        ></div>
+        {/* Minimal Light Dark Overlay */}
+        <div className="absolute inset-0 bg-slate-950/30 bg-gradient-to-t from-slate-950/60 via-slate-950/20 to-slate-950/40"></div>
+
+        {/* Foreground Content */}
+        <div className="relative z-10 max-w-7xl mx-auto text-center space-y-3">
+          <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]">
             Operation Theatre & Surgical Success Gallery
           </h1>
-          <p className="text-xs sm:text-sm text-slate-600 font-medium">
+          <p className="text-xs sm:text-sm text-slate-100 max-w-2xl mx-auto leading-relaxed font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
             Explore real-life photos from our advanced modular Operation Theatres (OT), surgical procedures, successful patient recoveries, and critical care suites.
           </p>
         </div>
+      </section>
 
         {/* Category Filter Tabs */}
         <div className="flex flex-wrap justify-center gap-2">

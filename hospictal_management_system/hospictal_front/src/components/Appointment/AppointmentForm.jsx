@@ -1,13 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { doctors } from "../../data/doctors";
+import { doctors as defaultDoctors } from "../../data/doctors";
 import { departments } from "../../data/departments";
-import { createAppointment } from "../../services/api";
+import { createAppointment, fetchDoctors } from "../../services/api";
+import { toast } from "react-toastify";
 
 function AppointmentForm() {
   const [searchParams] = useSearchParams();
   const preSelectedDoctorId = searchParams.get("doctorId");
   const preSelectedPackage = searchParams.get("package");
+
+  const [doctorsList, setDoctorsList] = useState(defaultDoctors);
+
+  useEffect(() => {
+    const loadDoctors = async () => {
+      try {
+        const res = await fetchDoctors();
+        if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
+          setDoctorsList(res.data);
+        }
+      } catch (err) {
+        console.error("Error fetching doctors for appointment form from MongoDB:", err);
+      }
+    };
+    loadDoctors();
+  }, []);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -27,14 +44,14 @@ function AppointmentForm() {
   const [loading, setLoading] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(null);
 
-  // Derive filtered doctors based on selected department
+  // Filtered doctors based on selected department
   const filteredDoctors = formData.department
-    ? doctors.filter(
+    ? doctorsList.filter(
         (d) =>
           d.department.toLowerCase().includes(formData.department.toLowerCase()) ||
           formData.department.toLowerCase().includes(d.department.toLowerCase())
       )
-    : doctors;
+    : doctorsList;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -61,7 +78,12 @@ function AppointmentForm() {
     if (!formData.appointmentDate) newErrors.appointmentDate = "Select an appointment date";
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+
+    if (Object.keys(newErrors).length > 0) {
+      toast.error("Form Validation Error: Please correct invalid or missing fields before proceeding.");
+      return false;
+    }
+    return true;
   };
 
   const handleSubmit = async (e) => {
@@ -74,8 +96,10 @@ function AppointmentForm() {
     try {
       const response = await createAppointment(formData);
       setBookingSuccess(response);
+      toast.success(`🎉 Appointment Booked! Ref: ${response.bookingId}`);
     } catch (err) {
       console.error("Booking submission error:", err);
+      toast.error("Failed to schedule appointment. Please check connection.");
       setErrors({ server: "Failed to book appointment. Please try again or call support." });
     } finally {
       setLoading(false);
@@ -130,12 +154,9 @@ Phone: ${formData.phone}`;
             onClick={handleWhatsAppRedirect}
             className="w-full py-3 px-6 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition-all shadow-md shadow-emerald-200 flex items-center justify-center space-x-2 cursor-pointer"
           >
-            <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.42 9.863-9.864.001-2.63-1.023-5.101-2.885-6.968C16.588 1.951 14.12 1.93 11.5 1.93 6.064 1.93 1.64 6.35 1.637 11.794c-.001 1.716.463 3.393 1.342 4.915l-.982 3.582 3.658-.96c1.479.807 3.09 1.233 4.609 1.222zM18.06 14.85c-.328-.164-1.942-.958-2.242-1.069-.3-.109-.519-.164-.738.164-.219.328-.847 1.069-1.039 1.288-.192.219-.384.246-.712.082-.328-.164-1.386-.51-2.64-1.627-.975-.87-1.633-1.946-1.825-2.274-.192-.329-.02-.507.144-.671.147-.148.328-.383.493-.574.164-.192.219-.328.328-.547.11-.219.055-.411-.027-.574-.082-.164-.738-1.778-1.012-2.434-.267-.641-.561-.553-.768-.564-.199-.01-.428-.012-.657-.012-.229 0-.602.086-.917.429-.315.343-1.202 1.176-1.202 2.871 0 1.696 1.233 3.332 1.403 3.56.17.228 2.427 3.705 5.877 5.197.82.355 1.46.567 1.96.726.824.262 1.575.225 2.167.137.66-.099 1.942-.794 2.216-1.56.274-.767.274-1.423.192-1.56-.082-.137-.3-.219-.628-.383z" />
-            </svg>
             <span>Send Confirmation to Hospital WhatsApp (+91 77878 14476)</span>
           </button>
-          
+
           <button
             onClick={() => setBookingSuccess(null)}
             className="w-full py-2.5 px-6 border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-xs rounded-xl transition-all cursor-pointer"

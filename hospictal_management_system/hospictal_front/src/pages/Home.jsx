@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import Hero from "../components/Hero/Hero";
 import About from "../components/About/About";
 import ServiceCard from "../components/Services/ServiceCard";
@@ -10,12 +11,36 @@ import ContactForm from "../components/Contact/ContactForm";
 
 import { services } from "../data/services";
 import { departments } from "../data/departments";
-import { doctors } from "../data/doctors";
-import { packages } from "../data/packages";
+import { doctors as defaultDoctors } from "../data/doctors";
+import { packages as defaultPackages } from "../data/packages";
 import { testimonials } from "../data/testimonials";
+import { fetchDoctors, fetchPackages } from "../services/api";
 import { Link } from "react-router-dom";
 
 function Home() {
+  const [doctorsList, setDoctorsList] = useState(defaultDoctors);
+  const [packagesList, setPackagesList] = useState(defaultPackages);
+
+  useEffect(() => {
+    const loadHomeData = async () => {
+      try {
+        const [docRes, pkgRes] = await Promise.all([
+          fetchDoctors(),
+          fetchPackages()
+        ]);
+        if (docRes && docRes.success && Array.isArray(docRes.data) && docRes.data.length > 0) {
+          setDoctorsList(docRes.data);
+        }
+        if (pkgRes && pkgRes.success && Array.isArray(pkgRes.data) && pkgRes.data.length > 0) {
+          setPackagesList(pkgRes.data);
+        }
+      } catch (err) {
+        console.error("Error fetching homepage data from MongoDB database:", err);
+      }
+    };
+    loadHomeData();
+  }, []);
+
   // Duplicate array for seamless infinite marquee loop
   const marqueeTestimonials = [...testimonials, ...testimonials];
 
@@ -103,7 +128,7 @@ function Home() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {doctors.slice(0, 3).map((doctor) => (
+            {doctorsList.slice(0, 3).map((doctor) => (
               <DoctorCard key={doctor.id} doctor={doctor} />
             ))}
           </div>
@@ -124,8 +149,8 @@ function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {packages.map((pkg) => (
-              <PackageCard key={pkg.id} pkg={pkg} />
+            {packagesList.slice(0, 3).map((pkg) => (
+              <PackageCard key={pkg._id || pkg.id} pkg={pkg} />
             ))}
           </div>
         </div>

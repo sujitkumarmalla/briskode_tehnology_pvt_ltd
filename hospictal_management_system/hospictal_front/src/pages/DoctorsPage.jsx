@@ -1,18 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
 import DoctorList from "../components/Doctors/DoctorList";
-import { doctors } from "../data/doctors";
+import { doctors as initialDoctors } from "../data/doctors";
 import { departments } from "../data/departments";
+import { fetchDoctors } from "../services/api";
 
 function DoctorsPage() {
   const [searchParams] = useSearchParams();
   const selectedDeptParam = searchParams.get("department") || "All";
 
+  const [doctorsList, setDoctorsList] = useState(initialDoctors);
   const [selectedDept, setSelectedDept] = useState(selectedDeptParam);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  const filteredDoctors = doctors.filter((doc) => {
+  useEffect(() => {
+    const loadDoctorsData = async () => {
+      try {
+        const res = await fetchDoctors();
+        if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
+          setDoctorsList(res.data);
+        }
+      } catch (err) {
+        console.error("Error fetching doctors from MongoDB database:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadDoctorsData();
+  }, []);
+
+  const filteredDoctors = doctorsList.filter((doc) => {
     const matchesDept = selectedDept === "All" || doc.department.toLowerCase() === selectedDept.toLowerCase();
     const matchesSearch = doc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           doc.specialization.toLowerCase().includes(searchTerm.toLowerCase());
@@ -23,14 +42,22 @@ function DoctorsPage() {
     <div>
       <Breadcrumb items={[{ label: "Doctors & Specialists" }]} />
 
-      <section className="bg-gradient-to-r from-slate-900 to-emerald-950 text-white py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center space-y-4">
-          <span className="text-emerald-400 font-extrabold text-xs uppercase tracking-widest bg-emerald-950/80 px-3 py-1 rounded-full border border-emerald-800">
-            Medical Faculty & Consultants
-          </span>
-          <h1 className="text-3xl sm:text-5xl font-black">Our Specialist Doctors</h1>
-          <p className="text-xs sm:text-sm text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            Find highly qualified medical specialists, review their clinical experience, and book direct consultations.
+      <section className="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden bg-slate-900 text-white shadow-2xl">
+        {/* Bright High-Visibility Blurred Hospital Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center filter blur-[2px] scale-105 opacity-90 transition-all"
+          style={{ backgroundImage: `url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=1600')` }}
+        ></div>
+        {/* Minimal Light Dark Overlay */}
+        <div className="absolute inset-0 bg-slate-950/30 bg-gradient-to-t from-slate-950/60 via-slate-950/20 to-slate-950/40"></div>
+
+        {/* Foreground Content */}
+        <div className="relative z-10 max-w-7xl mx-auto text-center space-y-3">
+          <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]">
+            Our Doctors & Specialists
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-100 max-w-2xl mx-auto leading-relaxed font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+            Consult with our highly qualified, board-certified senior doctors across all medical departments.
           </p>
 
           {/* Search Bar */}
@@ -58,7 +85,7 @@ function DoctorsPage() {
                   : "bg-slate-100 text-slate-600 hover:bg-slate-200"
               }`}
             >
-              All Departments ({doctors.length})
+              All Departments ({doctorsList.length})
             </button>
             {departments.map((dept) => (
               <button
