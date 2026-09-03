@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { NotificationProvider } from "./context/NotificationContext";
+import { ThemeProvider } from "./context/ThemeContext";
 
 import DashboardLayout from "./components/layouts/DashboardLayout";
 import LoginPage from "./pages/auth/LoginPage";
@@ -93,18 +94,20 @@ const RootRedirect = () => {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <NotificationProvider>
-        <BrowserRouter>
-          <ToastContainer position="top-right" autoClose={3000} theme="colored" />
-          <Routes>
-            {/* Public Pages */}
+    <ThemeProvider>
+      <AuthProvider>
+        <NotificationProvider>
+          <BrowserRouter>
+            <ToastContainer position="top-right" autoClose={3000} theme="colored" />
+            <Routes>
+              {/* Public Pages */}
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/departments" element={<DepartmentsPage />} />
             <Route path="/doctors" element={<DoctorsPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/pmjay-scheme" element={<PMJAYSchemePage />} />
+            <Route path="/bsky-scheme" element={<PMJAYSchemePage />} />
             <Route path="/career" element={<CareerPage />} />
             <Route path="/gallery" element={<GalleryPage />} />
             <Route path="/blog" element={<BlogPage />} />
@@ -187,5 +190,6 @@ export default function App() {
         </BrowserRouter>
       </NotificationProvider>
     </AuthProvider>
+    </ThemeProvider>
   );
 }

@@ -74,6 +74,8 @@ export const login = async (req, res) => {
         department: user.department,
         specialization: user.specialization,
         qualification: user.qualification,
+        workingHours: user.workingHours,
+        consultationFee: user.consultationFee,
         profileImage: user.profileImage,
         isActive: user.isActive
       }

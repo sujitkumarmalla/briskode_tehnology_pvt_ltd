@@ -157,14 +157,29 @@ export const exportAppointmentsCSV = () => {
 
 // --- DOCTORS MONGODB SERVICES ---
 
-// Fetch Doctors from MongoDB
+// Fetch Doctors from MongoDB (checks /doctors & /users?role=DOCTOR)
 export const fetchDoctors = async () => {
   try {
     const res = await api.get("/doctors");
-    return res.data;
+    const docs = res.data?.data || res.data?.doctors || res.data?.staff || [];
+    if (docs.length > 0) {
+      return { success: true, data: docs, doctors: docs, count: docs.length };
+    }
   } catch (err) {
-    return { success: true, data: defaultDoctors };
+    console.warn("Direct /doctors endpoint failed, attempting fallback to /users?role=DOCTOR", err.message);
   }
+
+  try {
+    const userRes = await api.get("/users?role=DOCTOR");
+    const docs = userRes.data?.staff || userRes.data?.users || [];
+    if (docs.length > 0) {
+      return { success: true, data: docs, doctors: docs, count: docs.length };
+    }
+  } catch (e) {
+    console.warn("Fallback to /users?role=DOCTOR failed", e.message);
+  }
+
+  return { success: true, data: defaultDoctors, doctors: defaultDoctors };
 };
 
 // Update Doctor Status in MongoDB

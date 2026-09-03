@@ -30,6 +30,47 @@ export const getStaff = async (req, res) => {
       .populate("department", "name")
       .sort({ createdAt: -1 });
 
+    if (role && role.toUpperCase() === "DOCTOR") {
+      const docDocs = await Doctor.find().sort({ createdAt: -1 });
+      const staffMap = new Map();
+
+      // First add from Doctor model
+      docDocs.forEach((d) => {
+        const key = d.email ? d.email.toLowerCase().trim() : String(d.id || d._id);
+        staffMap.set(key, {
+          _id: d._id,
+          id: d.id || d._id,
+          empId: `DOC${String(d.id || 100).substring(0, 3)}`,
+          name: d.name,
+          email: d.email || "",
+          phone: d.phone || "",
+          role: "DOCTOR",
+          specialization: d.specialization || "General Specialist",
+          department: typeof d.department === "object" ? d.department : { name: d.department || "General Medicine" },
+          qualification: d.qualification || "MBBS, MD",
+          experience: d.experience || 5,
+          consultationFee: d.consultationFee || 500,
+          workingHours: d.availability || "09:00 AM - 05:00 PM",
+          profileImage: d.image || "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=200",
+          isActive: d.status === "Available"
+        });
+      });
+
+      // Merge from User collection (where role === 'DOCTOR')
+      staff.forEach((u) => {
+        const key = u.email ? u.email.toLowerCase().trim() : String(u._id);
+        const existing = staffMap.get(key) || {};
+        staffMap.set(key, {
+          ...existing,
+          ...u.toObject(),
+          department: u.department || existing.department || { name: "General Medicine" }
+        });
+      });
+
+      const combinedStaff = Array.from(staffMap.values());
+      return res.status(200).json({ success: true, count: combinedStaff.length, staff: combinedStaff });
+    }
+
     return res.status(200).json({ success: true, count: staff.length, staff });
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -97,7 +138,7 @@ export const createStaff = async (req, res) => {
           if (dObj) deptName = dObj.name;
         }
         await Doctor.create({
-          id: docCount + 100,
+          id: Date.now() + Math.floor(Math.random() * 1000),
           name: user.name,
           specialization: specialization || "Consultant Specialist",
           department: deptName,
@@ -183,15 +224,28 @@ export const updateStaff = async (req, res) => {
 
     // Also sync update into 'doctors' collection
     if (user.role === "DOCTOR") {
+      let deptName = "General Medicine";
+      if (user.department) {
+        const dObj = await Department.findById(user.department).catch(() => null);
+        if (dObj) deptName = dObj.name;
+      }
       await Doctor.findOneAndUpdate(
         { email: user.email },
         {
+          id: Date.now() + Math.floor(Math.random() * 1000),
           name: user.name,
+          email: user.email,
           phone: user.phone,
-          specialization: user.specialization,
-          qualification: user.qualification,
-          consultationFee: user.consultationFee
-        }
+          specialization: user.specialization || "General Specialist",
+          department: deptName,
+          qualification: user.qualification || "MBBS, MD",
+          experience: Number(user.experience) || 5,
+          consultationFee: user.consultationFee || 500,
+          availability: user.workingHours || "09:00 AM - 05:00 PM",
+          status: user.isActive ? "Available" : "On Leave",
+          image: user.profileImage || "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=200"
+        },
+        { upsert: true, new: true, setDefaultsOnInsert: true }
       ).catch(err => console.error("Doctor collection sync update notice:", err.message));
     }
 

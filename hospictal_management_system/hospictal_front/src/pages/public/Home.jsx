@@ -18,10 +18,90 @@ import {
   Users,
   Send,
   ArrowRight,
-  Sparkles
+  Sparkles,
+  Ambulance
 } from "lucide-react";
 import { toast } from "react-toastify";
-import API from "../../utils/api";
+// Reusable Smooth Scroll Entrance Animation Component
+function ScrollReveal({ children, className = "", delay = 0, direction = "up" }) {
+  const [isVisible, setIsVisible] = useState(false);
+  const domRef = React.useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
+    );
+
+    const currentDom = domRef.current;
+    if (currentDom) observer.observe(currentDom);
+
+    return () => {
+      if (currentDom) observer.unobserve(currentDom);
+    };
+  }, []);
+
+  const getTransform = () => {
+    if (isVisible) return "translate-x-0 translate-y-0 opacity-100 scale-100";
+    if (direction === "up") return "translate-y-12 opacity-0 scale-[0.97]";
+    if (direction === "left") return "-translate-x-12 opacity-0 scale-[0.97]";
+    if (direction === "right") return "translate-x-12 opacity-0 scale-[0.97]";
+    return "translate-y-12 opacity-0 scale-[0.97]";
+  };
+
+  return (
+    <div
+      ref={domRef}
+      style={{ transitionDelay: `${delay}ms` }}
+      className={`transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) transform ${getTransform()} ${className}`}
+    >
+      {children}
+    </div>
+  );
+}
+
+const DEFAULT_HOMEPAGE_DOCTORS = [
+  {
+    _id: "doc-default-1",
+    name: "Dr. Arvind Kapoor",
+    department: { name: "Cardiology" },
+    specialization: "Chief Interventional Cardiologist",
+    qualification: "MD (Med), DM (Cardiology), FACC",
+    consultationFee: 800,
+    profileImage: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    _id: "doc-default-2",
+    name: "Dr. Meera Deshmukh",
+    department: { name: "Neurology" },
+    specialization: "Senior Neuro Surgeon & Stroke Specialist",
+    qualification: "MBBS, MS (Sur), MCh (Neurosurgery)",
+    consultationFee: 900,
+    profileImage: "https://images.unsplash.com/photo-1594824813566-78a05c7553b4?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    _id: "doc-default-3",
+    name: "Dr. Rajesh Verma",
+    department: { name: "Gastroenterology" },
+    specialization: "Senior Gastroenterology Consultant",
+    qualification: "MD, DM (Gastroenterology)",
+    consultationFee: 750,
+    profileImage: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    _id: "doc-default-4",
+    name: "Dr. Sunita Patnaik",
+    department: { name: "Pediatrics" },
+    specialization: "Senior Pediatrician & Neonatologist",
+    qualification: "MD (Pediatrics), DCH",
+    consultationFee: 650,
+    profileImage: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=400"
+  }
+];
 
 export default function Home() {
   // Hero Carousel State
@@ -35,11 +115,28 @@ export default function Home() {
     const fetchBackendDoctors = async () => {
       try {
         const res = await API.get("/users?role=DOCTOR");
-        if (res.data.success) {
-          setBackendDoctors(res.data.staff);
+        const list = res.data?.staff || res.data?.doctors || res.data?.data || [];
+        if (Array.isArray(list) && list.length > 0) {
+          setBackendDoctors(list);
+        } else {
+          // Try /api/doctors endpoint
+          const docRes = await API.get("/doctors");
+          const docList = docRes.data?.data || docRes.data?.doctors || docRes.data?.staff || [];
+          if (Array.isArray(docList) && docList.length > 0) {
+            setBackendDoctors(docList);
+          } else {
+            setBackendDoctors(DEFAULT_HOMEPAGE_DOCTORS);
+          }
         }
       } catch (err) {
         console.error("Error fetching doctors on home page:", err);
+        try {
+          const docRes = await API.get("/doctors");
+          const docList = docRes.data?.data || docRes.data?.doctors || docRes.data?.staff || [];
+          setBackendDoctors(Array.isArray(docList) && docList.length > 0 ? docList : DEFAULT_HOMEPAGE_DOCTORS);
+        } catch (e) {
+          setBackendDoctors(DEFAULT_HOMEPAGE_DOCTORS);
+        }
       } finally {
         setLoadingDocs(false);
       }
@@ -49,25 +146,46 @@ export default function Home() {
 
   const heroSlides = [
     {
-      title: "Briskode Public Hospital",
-      subtitle: "Compassionate care, advanced medicine for all",
-      description: "Your trusted 500+ bedded super-speciality destination at OMFED Square, Patia, Bhubaneswar.",
+      title: "Compassionate Care. Advanced Medicine.",
+      subtitle: "The Language of Healing & Hope",
+      description: "Capital Public Seva Hospital — Providing 24/7 world-class multi-specialty care, cutting-edge trauma response, and empathetic clinical excellence.",
+      quote: "“Compassion is the quiet language spoken by gentle hands, heard by weary hearts, and understood beyond all words.”",
+      meaning: "True medicine treats the whole person — restoring health, renewing lives, and serving humanity with heartfelt warmth.",
+      ctaText: "Book Appointment",
+      ctaLink: "/contact",
       image: "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?auto=format&fit=crop&q=80&w=1600",
-      badges: ["NABH Accredited", "Ayushman PM-JAY Cashless", "24x7 Emergency"]
+      badges: [
+        { label: "NABH Accredited", icon: Award },
+        { label: "24×7 Emergency", icon: Ambulance }
+      ]
     },
     {
-      title: "24/7 Emergency & Trauma Center",
-      subtitle: "Rapid response, life-saving critical care in Patia",
-      description: "State-of-the-art ICU, Cath-Lab & level 1 casualty response in Bhubaneswar.",
+      title: "Where Science Meets Soul",
+      subtitle: "The Essence of Restoring Lives",
+      description: "Equipped with state-of-the-art cath labs, modular OTs, and 3D intraoperative neuro navigation for optimal patient recovery.",
+      quote: "“The highest art of medicine is to restore not merely bodily strength, but the joy, dignity, and true meaning of living.”",
+      meaning: "Every life saved is a testament to unyielding dedication, bringing peace of mind to families.",
+      ctaText: "Explore Super Specialities",
+      ctaLink: "/departments",
       image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=1600",
-      badges: ["Level 1 Trauma Care", "Advanced ICU Ambulances"]
+      badges: [
+        { label: "50+ Specialists", icon: Users },
+        { label: "Ayushman PM-JAY Cashless", icon: ShieldCheck }
+      ]
     },
     {
-      title: "Centers of Excellence",
-      subtitle: "Cardiac, Neuro, Gastro & Surgical Super Specialities",
-      description: "Renowned senior specialists & cutting-edge diagnostic technology under one roof.",
+      title: "24×7 Emergency & Trauma Response",
+      subtitle: "Grace & Comfort in Every Hour",
+      description: "Immediate level-1 casualty response, advanced cardiac ambulances, and round-the-clock emergency ICU consultants.",
+      quote: "“In every act of clinical service lies an eternal grace: lighting up another's darkest hour with comfort and strength.”",
+      meaning: "Care beyond cure — honoring human dignity through every step of emergency response and healing.",
+      ctaText: "Emergency Helpline",
+      ctaLink: "/contact",
       image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=1600",
-      badges: ["NABL Diagnostic Lab", "12 Modular OTs"]
+      badges: [
+        { label: "Level-1 Trauma Center", icon: ShieldCheck },
+        { label: "24×7 Ambulance Service", icon: Ambulance }
+      ]
     }
   ];
 
@@ -124,7 +242,7 @@ export default function Home() {
         "Laser lithotripsy for kidney & prostate stones",
         "Hypertension & diabetic nephropathy management"
       ],
-      image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=800"
+      image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=800"
     },
     onco: {
       title: "Onco Sciences & Chemotherapy",
@@ -135,7 +253,7 @@ export default function Home() {
         "Organ-preserving cancer surgical procedures",
         "Palliative care & psycho-oncology support"
       ],
-      image: "https://images.unsplash.com/photo-1631815588090-d4bfec5b1cdb?auto=format&fit=crop&q=80&w=800"
+      image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=800"
     }
   };
 
@@ -159,7 +277,7 @@ export default function Home() {
       name: "Bikash Chandra Sahoo",
       location: "VIP Road, Puri",
       rating: 5,
-      text: "We utilized our Odisha BSKY card smoothly without any hassle. The billing reception counter and helpdesk guided us at every step. Truly world-class hospital!"
+      text: "We utilized our Ayushman Bharat PM-JAY card smoothly without any hassle. The billing reception counter and helpdesk guided us at every step. Truly world-class hospital!"
     },
     {
       name: "Rashmi Rekha Rout",
@@ -205,8 +323,8 @@ export default function Home() {
       <PublicNavbar />
 
       <main className="flex-1">
-        {/* 2. HERO MOTION SLIDER CAROUSEL */}
-        <section className="relative bg-slate-950 text-white min-h-[500px] sm:min-h-[580px] flex items-center overflow-hidden">
+        {/* 2. HERO MOTION SLIDER CAROUSEL WITH STYLISH FONTS, ATTRACTIVE LANGUAGE & MEANING */}
+        <section className="relative bg-slate-950 text-white min-h-[580px] sm:min-h-[640px] flex items-center overflow-hidden">
           {heroSlides.map((slide, idx) => (
             <div
               key={idx}
@@ -214,215 +332,322 @@ export default function Home() {
                 idx === currentSlide ? "opacity-100 scale-100 z-10" : "opacity-0 scale-95 z-0 pointer-events-none"
               }`}
             >
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/85 to-transparent z-10" />
+              {/* Background Image (Absolute z-0 so it stays behind text overlay) */}
               <img
                 src={slide.image}
                 alt={slide.title}
-                className="w-full h-full object-cover object-center"
+                className="absolute inset-0 w-full h-full object-cover object-center transform scale-105 transition-transform duration-10000 ease-out z-0 opacity-75"
               />
 
-              {/* Content */}
-              <div className="relative z-20 max-w-7xl mx-auto px-6 sm:px-8 h-full flex flex-col justify-center py-20">
-                <div className="max-w-2xl space-y-4">
-                  <div className="flex flex-wrap gap-2">
-                    {slide.badges.map((b, i) => (
-                      <span key={i} className="bg-blue-600/80 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1 rounded-full border border-blue-400/40 shadow-sm">
-                        {b}
+              {/* Dark Overlays for High Contrast Readability (z-10) */}
+              <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/85 to-slate-950/40 z-10" />
+              <div className="absolute inset-0 bg-emerald-950/20 mix-blend-multiply z-10" />
+
+              {/* Text & Stylish Quote Content Container (z-20) */}
+              <div className="relative z-20 max-w-7xl mx-auto px-6 sm:px-12 h-full flex flex-col justify-center py-16 sm:py-24">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                  
+                  {/* Left Column: Heading, Subtitle, Description & Badges */}
+                  <div className="lg:col-span-7 space-y-4">
+                    {/* Top Tag badge with Cinzel/Great Vibes font */}
+                    <div className="flex flex-wrap items-center gap-2.5">
+                      <span className="bg-emerald-950/90 text-emerald-300 font-cinzel text-xs font-bold px-3.5 py-1.5 rounded-full border border-emerald-500/40 shadow-md uppercase tracking-wider flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Capital Public Seva
                       </span>
-                    ))}
+                      <span className="font-great-vibes text-amber-300 text-xl font-normal drop-shadow">
+                        {slide.subtitle}
+                      </span>
+                    </div>
+
+                    {/* Main Title */}
+                    <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white leading-tight tracking-tight drop-shadow-lg">
+                      {slide.title}
+                    </h1>
+
+                    {/* Description */}
+                    <p className="text-xs sm:text-sm text-slate-200 font-medium leading-relaxed max-w-xl">
+                      {slide.description}
+                    </p>
+
+                    {/* Action Buttons */}
+                    <div className="pt-2 flex flex-wrap gap-3.5 items-center">
+                      <Link
+                        to={slide.ctaLink || "/contact"}
+                        className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs sm:text-sm px-7 py-3.5 rounded-full shadow-xl transition-all transform hover:scale-105 cursor-pointer flex items-center gap-2"
+                      >
+                        <span>{slide.ctaText || "Contact Us"}</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </Link>
+                      <Link
+                        to="/contact"
+                        className="bg-white/10 hover:bg-white/20 text-white font-bold text-xs sm:text-sm px-6 py-3.5 rounded-full backdrop-blur-md border border-white/30 transition-all"
+                      >
+                        Book OPD Pass
+                      </Link>
+                    </div>
+
+                    {/* Pill Badges */}
+                    <div className="flex flex-wrap gap-2.5 pt-2 items-center">
+                      {slide.badges.map((b, i) => {
+                        const IconComponent = b.icon;
+                        return (
+                          <div
+                            key={i}
+                            className="bg-slate-900/80 backdrop-blur-md border border-emerald-500/30 rounded-full px-4 py-1.5 text-xs font-semibold text-emerald-200 flex items-center gap-2 shadow-md"
+                          >
+                            <IconComponent className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
+                            <span>{b.label}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
 
-                  <h1 className="text-3xl sm:text-5xl font-black text-white leading-tight tracking-tight drop-shadow-md">
-                    {slide.title}
-                  </h1>
-                  <p className="text-base sm:text-xl font-semibold text-blue-300">
-                    {slide.subtitle}
-                  </p>
-                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
-                    {slide.description}
-                  </p>
+                  {/* Right Column: Glassmorphism Quote Card with Stylish Font & Deep Meaning */}
+                  <div className="lg:col-span-5">
+                    <div className="bg-slate-950/85 border border-emerald-500/40 backdrop-blur-xl rounded-3xl p-6 sm:p-7 shadow-2xl space-y-3.5 relative overflow-hidden">
+                      <div className="absolute -right-8 -top-8 w-28 h-28 bg-emerald-500/15 rounded-full blur-2xl pointer-events-none"></div>
 
-                  <div className="pt-4 flex flex-wrap gap-3">
-                    <Link
-                      to="/contact"
-                      className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs px-6 py-3.5 rounded-xl shadow-xl shadow-blue-600/40 transition-all transform hover:-translate-y-0.5"
-                    >
-                      <Calendar className="w-4 h-4" /> Book OPD Pass Now
-                    </Link>
-                    <Link
-                      to="/departments"
-                      className="flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700 text-slate-200 font-bold text-xs px-6 py-3.5 rounded-xl border border-slate-700 backdrop-blur-md transition-all"
-                    >
-                      Explore Specialities <ArrowRight className="w-4 h-4" />
-                    </Link>
+                      <div className="flex items-center justify-between border-b border-emerald-500/20 pb-2.5">
+                        <span className="font-great-vibes text-2xl text-amber-300">Language of Healing</span>
+                        <span className="text-[10px] uppercase font-bold tracking-widest text-emerald-300 bg-emerald-900/90 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">
+                          Deep Meaning
+                        </span>
+                      </div>
+
+                      {/* Stylish Quote in Playfair Display Serif */}
+                      <blockquote className="relative pt-1">
+                        <span className="text-emerald-500/30 font-serif text-5xl leading-none absolute -top-3 -left-3 select-none">“</span>
+                        <p className="font-playfair italic text-white text-base sm:text-lg leading-relaxed pl-3 drop-shadow-md">
+                          {slide.quote}
+                        </p>
+                      </blockquote>
+
+                      {/* Meaning in Cormorant Garamond */}
+                      <div className="pt-2.5 border-t border-emerald-500/20 space-y-1">
+                        <div className="flex items-start gap-2">
+                          <span className="shrink-0 text-amber-400 text-[10px] font-bold font-sans uppercase tracking-wider bg-amber-400/10 border border-amber-400/30 px-1.5 py-0.5 rounded mt-0.5">
+                            Meaning
+                          </span>
+                          <p className="font-cormorant italic text-sm text-emerald-100 font-medium leading-tight">
+                            {slide.meaning}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
+
                 </div>
               </div>
             </div>
           ))}
 
-          {/* Controls */}
+          {/* Circular Navigation Arrow Buttons matching reference screenshot */}
           <button
             onClick={() => setCurrentSlide((prev) => (prev === 0 ? heroSlides.length - 1 : prev - 1))}
-            className="absolute left-4 z-30 p-3 rounded-full bg-white/20 hover:bg-white/40 text-white backdrop-blur-md transition-all"
+            className="absolute left-6 z-30 w-11 h-11 bg-white text-slate-900 rounded-full flex items-center justify-center shadow-2xl border border-white/80 transition-all transform hover:scale-110 cursor-pointer"
           >
-            <ChevronLeft className="w-6 h-6" />
+            <ChevronLeft className="w-6 h-6 stroke-[2.5]" />
           </button>
           <button
             onClick={() => setCurrentSlide((prev) => (prev + 1) % heroSlides.length)}
-            className="absolute right-4 z-30 p-3 rounded-full bg-white/20 hover:bg-white/40 text-white backdrop-blur-md transition-all"
+            className="absolute right-6 z-30 w-11 h-11 bg-white text-slate-900 rounded-full flex items-center justify-center shadow-2xl border border-white/80 transition-all transform hover:scale-110 cursor-pointer"
           >
-            <ChevronRight className="w-6 h-6" />
+            <ChevronRight className="w-6 h-6 stroke-[2.5]" />
           </button>
 
-          {/* Indicators */}
+          {/* Slider Indicators */}
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-2">
             {heroSlides.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setCurrentSlide(i)}
-                className={`h-2 rounded-full transition-all ${
-                  i === currentSlide ? "w-8 bg-blue-500" : "w-2 bg-white/50"
+                className={`h-2 rounded-full transition-all cursor-pointer ${
+                  i === currentSlide ? "w-8 bg-[#2e9e62]" : "w-2 bg-white/40"
                 }`}
               />
             ))}
           </div>
         </section>
 
-        {/* 3. OUR COMMITMENTS GRID */}
-        <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <div className="inline-flex items-center gap-1.5 text-blue-600 bg-blue-50 px-3 py-1 rounded-full text-xs font-extrabold mb-2">
-              <Sparkles className="w-4 h-4" /> BRISKODE PUBLIC HOSPITAL
+        {/* TRUST STATS HERO COUNTER BAR */}
+        <section className="bg-slate-900 border-y border-slate-800 py-6 px-4 text-white">
+          <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div className="space-y-1">
+              <h3 className="text-2xl sm:text-3xl font-black text-blue-400">500+</h3>
+              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Hospital Beds</p>
             </div>
-            <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">Our Commitments</h2>
-            <p className="text-xs sm:text-sm text-slate-500 mt-2">Delivering world-class healthcare with transparency, competency, and empathy.</p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md hover:shadow-xl transition-all transform hover:-translate-y-1 group">
-              <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                <Stethoscope className="w-7 h-7" />
-              </div>
-              <h3 className="text-base font-bold text-slate-900 mb-2">Most Advanced Technology</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Equipped with modern cath-labs, 3D neuro navigation, and modular OTs at Patia, Bhubaneswar.
-              </p>
+            <div className="space-y-1">
+              <h3 className="text-2xl sm:text-3xl font-black text-teal-400">50+</h3>
+              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Senior Consultants</p>
             </div>
-
-            <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md hover:shadow-xl transition-all transform hover:-translate-y-1 group">
-              <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                <Heart className="w-7 h-7" />
-              </div>
-              <h3 className="text-base font-bold text-slate-900 mb-2">Commitment to Serve</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Dedicated to serving every citizen with high-quality medical care and human compassion.
-              </p>
+            <div className="space-y-1">
+              <h3 className="text-2xl sm:text-3xl font-black text-emerald-400">24/7</h3>
+              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Emergency & Trauma</p>
             </div>
-
-            <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md hover:shadow-xl transition-all transform hover:-translate-y-1 group">
-              <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-4 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                <ShieldCheck className="w-7 h-7" />
-              </div>
-              <h3 className="text-base font-bold text-slate-900 mb-2">Transparency & Ethics</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Fostering complete trust with ethical clinical pricing and patient-first medical decisions.
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md hover:shadow-xl transition-all transform hover:-translate-y-1 group">
-              <div className="w-14 h-14 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center mb-4 group-hover:bg-purple-600 group-hover:text-white transition-colors">
-                <Award className="w-7 h-7" />
-              </div>
-              <h3 className="text-base font-bold text-slate-900 mb-2">Ultimate Clinical Outcome</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Consistently delivering best-in-class recovery outcomes across all tertiary specialities.
-              </p>
+            <div className="space-y-1">
+              <h3 className="text-2xl sm:text-3xl font-black text-purple-400">100%</h3>
+              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Ayushman Bharat PM-JAY Cashless</p>
             </div>
           </div>
         </section>
 
-        {/* 4. OUR SUPER SPECIALITIES INTERACTIVE TABS */}
-        <section className="py-16 bg-blue-50/50 border-y border-blue-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* 3. OUR COMMITMENTS GRID */}
+        <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          <ScrollReveal direction="up">
             <div className="text-center max-w-2xl mx-auto mb-12">
-              <span className="text-[11px] font-extrabold uppercase tracking-widest text-blue-600 block mb-1">SUPER SPECIALITIES</span>
-              <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">Clinical Centers of Excellence</h2>
-              <p className="text-xs sm:text-sm text-slate-500 mt-2">Tertiary medical expertise under one roof at OMFED Square, Patia</p>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              {/* Tabs */}
-              <div className="lg:col-span-4 space-y-2">
-                {[
-                  { id: "cardiac", label: "Cardiac Sciences", icon: Heart },
-                  { id: "neuro", label: "Neuro Sciences", icon: Brain },
-                  { id: "gastro", label: "Gastro Sciences", icon: Activity },
-                  { id: "renal", label: "Renal Sciences", icon: Stethoscope },
-                  { id: "onco", label: "Onco Sciences", icon: ShieldCheck }
-                ].map((tab) => {
-                  const Icon = tab.icon;
-                  const isActive = activeTab === tab.id;
-                  return (
-                    <button
-                      key={tab.id}
-                      onClick={() => setActiveTab(tab.id)}
-                      className={`w-full flex items-center justify-between p-4 rounded-2xl font-bold text-xs sm:text-sm transition-all ${
-                        isActive
-                          ? "bg-emerald-600 text-white shadow-lg shadow-emerald-600/30 scale-[1.02]"
-                          : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <Icon className="w-5 h-5" />
-                        <span>{tab.label}</span>
-                      </div>
-                      <ChevronRight className={`w-4 h-4 ${isActive ? "text-white" : "text-slate-400"}`} />
-                    </button>
-                  );
-                })}
+              <div className="inline-flex items-center gap-1.5 text-blue-600 bg-blue-50 px-3 py-1 rounded-full text-xs font-extrabold mb-2">
+                <Sparkles className="w-4 h-4" /> BRISKODE PUBLIC HOSPITAL
               </div>
+              <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">Our Commitments</h2>
+              <p className="text-xs sm:text-sm text-slate-500 mt-2">Delivering world-class healthcare with transparency, competency, and empathy.</p>
+            </div>
+          </ScrollReveal>
 
-              {/* Display Card */}
-              <div className="lg:col-span-8 bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xl">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-                  <div className="relative flex justify-center">
-                    <div className="w-56 h-56 sm:w-64 sm:h-64 rounded-full border-4 border-emerald-500 p-1.5 shadow-2xl relative overflow-hidden">
-                      <img
-                        src={specialitiesData[activeTab].image}
-                        alt={specialitiesData[activeTab].title}
-                        className="w-full h-full object-cover rounded-full"
-                      />
-                    </div>
-                  </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <ScrollReveal delay={100}>
+              <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group h-full">
+                <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                  <Stethoscope className="w-7 h-7" />
+                </div>
+                <h3 className="text-base font-bold text-slate-900 mb-2">Most Advanced Technology</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Equipped with modern cath-labs, 3D neuro navigation, and modular OTs at Patia, Bhubaneswar.
+                </p>
+              </div>
+            </ScrollReveal>
 
-                  <div className="space-y-4">
-                    <h3 className="text-2xl font-extrabold text-slate-900">{specialitiesData[activeTab].title}</h3>
-                    <p className="text-xs text-slate-600 leading-relaxed font-medium">
-                      {specialitiesData[activeTab].description}
-                    </p>
+            <ScrollReveal delay={200}>
+              <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group h-full">
+                <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300">
+                  <Heart className="w-7 h-7" />
+                </div>
+                <h3 className="text-base font-bold text-slate-900 mb-2">Commitment to Serve</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Dedicated to serving every citizen with high-quality medical care and human compassion.
+                </p>
+              </div>
+            </ScrollReveal>
 
-                    <div className="space-y-2">
-                      {specialitiesData[activeTab].bullets.map((b, idx) => (
-                        <div key={idx} className="flex items-start gap-2.5 text-xs font-semibold text-slate-800">
-                          <CheckCircle className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
-                          <span>{b}</span>
-                        </div>
-                      ))}
-                    </div>
+            <ScrollReveal delay={300}>
+              <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group h-full">
+                <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-4 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
+                  <ShieldCheck className="w-7 h-7" />
+                </div>
+                <h3 className="text-base font-bold text-slate-900 mb-2">Transparency & Ethics</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Fostering complete trust with ethical clinical pricing and patient-first medical decisions.
+                </p>
+              </div>
+            </ScrollReveal>
 
-                    <div className="pt-2">
-                      <Link
-                        to="/contact"
-                        className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md transition-colors"
-                      >
-                        Book Speciality Doctor <ArrowRight className="w-4 h-4" />
-                      </Link>
-                    </div>
-                  </div>
+            <ScrollReveal delay={400}>
+              <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group h-full">
+                <div className="w-14 h-14 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center mb-4 group-hover:bg-purple-600 group-hover:text-white transition-colors duration-300">
+                  <Award className="w-7 h-7" />
+                </div>
+                <h3 className="text-base font-bold text-slate-900 mb-2">Ultimate Clinical Outcome</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Consistently delivering best-in-class recovery outcomes across all tertiary specialities.
+                </p>
+              </div>
+            </ScrollReveal>
+          </div>
+        </section>
+
+        {/* 4. OUR SUPER SPECIALITIES SECTION (MATCHING REFERENCE DESIGN 1:1) */}
+        <section className="py-16 bg-[#eef6fc] relative overflow-hidden">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Header Banner & Top-Right Pill */}
+            <ScrollReveal direction="up">
+              <div className="relative mb-12 flex flex-col items-center justify-center">
+                <h2 className="text-3xl sm:text-5xl font-extrabold text-[#1b365d] tracking-tight text-center">
+                  Our Super Specialities
+                </h2>
+                <div className="sm:absolute right-0 top-1 mt-4 sm:mt-0 bg-white text-slate-700 font-bold px-4 py-1.5 rounded-full text-xs shadow-sm border border-slate-200/80">
+                  Our care spans across
                 </div>
               </div>
+            </ScrollReveal>
+
+            {/* Overlapping Layout Container */}
+            <div className="relative flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-0 mt-8">
+              
+              {/* Left Menu / Sidebar Tabs */}
+              <ScrollReveal direction="left" className="w-full lg:w-80 flex-shrink-0 z-10">
+                <div className="bg-[#2b548b] rounded-2xl overflow-hidden shadow-xl border border-[#234778]">
+                  {[
+                    { id: "cardiac", label: "Cardiac Sciences" },
+                    { id: "neuro", label: "Neuro Sciences" },
+                    { id: "gastro", label: "Gastro Sciences" },
+                    { id: "renal", label: "Renal Sciences" },
+                    { id: "onco", label: "Onco Sciences" }
+                  ].map((tab) => {
+                    const isActive = activeTab === tab.id;
+                    return (
+                      <button
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id)}
+                        className={`w-full text-left py-4 px-6 font-bold text-sm sm:text-base transition-all duration-200 flex items-center gap-2.5 border-b border-[#3764a0] last:border-b-0 cursor-pointer ${
+                          isActive
+                            ? "bg-[#2e9e62] text-white font-extrabold shadow-inner"
+                            : "bg-[#2b548b] text-white hover:bg-[#234878]"
+                        }`}
+                      >
+                        <span className="font-black text-lg leading-none">+</span>
+                        <span>{tab.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </ScrollReveal>
+
+              {/* Center Overlapping Circular Image with Green Border & Green Badge */}
+              <div className="relative lg:-mx-16 z-20 flex-shrink-0 my-4 lg:my-0">
+                {/* Floating Icon Badge with + */}
+                <div className="absolute -top-3 right-6 sm:right-10 z-30 flex items-center gap-1.5">
+                  <div className="w-13 h-13 sm:w-14 sm:h-14 bg-[#2e9e62] text-white rounded-full shadow-2xl border-4 border-white flex items-center justify-center">
+                    <Activity className="w-7 h-7 stroke-[2.5]" />
+                  </div>
+                  <span className="text-[#2e9e62] font-black text-2xl leading-none">+</span>
+                </div>
+
+                {/* Circular Image Ring */}
+                <div className="w-64 h-64 sm:w-80 sm:h-80 rounded-full border-[7px] border-[#2e9e62] p-1 bg-white shadow-2xl overflow-hidden">
+                  <img
+                    src={specialitiesData[activeTab].image}
+                    alt={specialitiesData[activeTab].title}
+                    className="w-full h-full object-cover rounded-full transition-transform duration-700 hover:scale-105"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&q=80&w=800";
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Right White Content Card */}
+              <ScrollReveal direction="right" className="w-full lg:flex-1">
+                <div className="bg-white rounded-3xl p-8 sm:p-12 lg:pl-20 shadow-xl border border-slate-100 min-h-[360px] flex flex-col justify-center">
+                  <h3 className="text-2xl sm:text-3xl font-extrabold text-[#1b365d] mb-3">
+                    {specialitiesData[activeTab].title}
+                  </h3>
+                  <p className="text-slate-600 text-xs sm:text-sm leading-relaxed mb-6 font-medium">
+                    {specialitiesData[activeTab].description}
+                  </p>
+
+                  <div className="space-y-3">
+                    {specialitiesData[activeTab].bullets.map((b, idx) => (
+                      <div key={idx} className="flex items-center gap-3 text-xs sm:text-sm font-semibold text-slate-800">
+                        <span className="w-3.5 h-3.5 rounded-full bg-[#2e9e62] flex-shrink-0" />
+                        <span>{b}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </ScrollReveal>
+
             </div>
           </div>
         </section>
@@ -430,22 +655,24 @@ export default function Home() {
         {/* DYNAMIC SENIOR CONSULTANTS & DOCTORS FROM BACKEND MONGODB */}
         <section className="py-16 bg-white border-b border-slate-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
-              <div>
-                <span className="text-[11px] font-extrabold uppercase tracking-widest text-blue-600 block mb-1">OUR MEDICAL TEAM</span>
-                <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                  Senior Consultants & Doctors ({backendDoctors.length})
-                </h2>
-                <p className="text-xs text-slate-500 mt-1">Direct live feed from Briskode Hospital clinical database</p>
-              </div>
+            <ScrollReveal direction="up">
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
+                <div>
+                  <span className="text-[11px] font-extrabold uppercase tracking-widest text-blue-600 block mb-1">OUR MEDICAL TEAM</span>
+                  <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
+                    Senior Consultants & Clinical Specialists
+                  </h2>
+                  <p className="text-xs text-slate-500 mt-1">Expert doctors across all super-speciality departments at Patia, Bhubaneswar</p>
+                </div>
 
-              <Link
-                to="/doctors"
-                className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-extrabold px-5 py-2.5 rounded-xl shadow-md transition-colors flex items-center gap-1.5 self-start sm:self-auto"
-              >
-                View All Doctors Directory <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
+                <Link
+                  to="/doctors"
+                  className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-extrabold px-5 py-2.5 rounded-xl shadow-md transition-colors flex items-center gap-1.5 self-start sm:self-auto"
+                >
+                  View All Doctors Directory <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </ScrollReveal>
 
             {loadingDocs ? (
               <div className="text-center py-8 text-xs font-semibold text-slate-500">Loading doctors from server...</div>
@@ -453,31 +680,44 @@ export default function Home() {
               <div className="text-center py-8 text-xs text-slate-400">No doctors found in database</div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {backendDoctors.slice(0, 4).map((doc) => {
+                {backendDoctors.slice(0, 4).map((doc, idx) => {
                   const deptName = doc.department?.name || "General Medicine";
                   return (
-                    <div key={doc._id} className="bg-slate-50 p-5 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
-                      <div className="space-y-3">
-                        <img
-                          src={doc.profileImage || "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=300"}
-                          alt={doc.name}
-                          className="w-full h-44 object-cover rounded-2xl"
-                        />
-                        <div>
-                          <h3 className="font-extrabold text-sm text-slate-900">{doc.name}</h3>
-                          <p className="text-xs font-bold text-blue-600">{deptName}</p>
-                          <p className="text-[11px] text-slate-600 font-medium mt-1">{doc.specialization}</p>
-                          <p className="text-[10px] text-slate-400">{doc.qualification || "MD, MBBS"}</p>
+                    <ScrollReveal key={doc._id} delay={idx * 120} direction="up">
+                      <div className="bg-slate-50 p-5 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col justify-between h-full group">
+                        <div className="space-y-3">
+                          <div className="relative overflow-hidden rounded-2xl">
+                            <img
+                              src={doc.profileImage || "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=300"}
+                              alt={doc.name}
+                              className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
+                            />
+                            {/* Visible Text Overlay Badge on Picture */}
+                            <div className="absolute top-2.5 left-2.5 bg-slate-950/80 backdrop-blur-md text-white text-[10px] font-extrabold px-3 py-1 rounded-full border border-white/20 shadow-md flex items-center gap-1.5">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                              <span>{deptName} • OPD Available</span>
+                            </div>
+                            {/* Fee Badge Overlay on Picture Bottom */}
+                            <div className="absolute bottom-2.5 right-2.5 bg-blue-600/90 backdrop-blur-md text-white text-[10px] font-black px-2.5 py-1 rounded-lg border border-blue-400/30 shadow-md">
+                              ₹{doc.consultationFee || 500}
+                            </div>
+                          </div>
+                          <div>
+                            <h3 className="font-extrabold text-sm text-slate-900">{doc.name}</h3>
+                            <p className="text-xs font-bold text-blue-600">{deptName}</p>
+                            <p className="text-[11px] text-slate-600 font-medium mt-1">{doc.specialization}</p>
+                            <p className="text-[10px] text-slate-400">{doc.qualification || "MD, MBBS"}</p>
+                          </div>
+                        </div>
+
+                        <div className="pt-3 border-t border-slate-200/60 mt-3 flex items-center justify-between">
+                          <span className="text-[11px] font-bold text-slate-900">OPD Pass Available</span>
+                          <Link to="/contact" className="text-[11px] font-extrabold text-teal-600 hover:underline">
+                            Book Pass
+                          </Link>
                         </div>
                       </div>
-
-                      <div className="pt-3 border-t border-slate-200/60 mt-3 flex items-center justify-between">
-                        <span className="text-[11px] font-bold text-slate-900">OPD Fee: ₹{doc.consultationFee || 500}</span>
-                        <Link to="/contact" className="text-[11px] font-extrabold text-teal-600 hover:underline">
-                          Book Pass
-                        </Link>
-                      </div>
-                    </div>
+                    </ScrollReveal>
                   );
                 })}
               </div>
@@ -485,86 +725,96 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 5. PARTNERS & BSKY ODISHA SCHEME */}
-        <section className="py-16 bg-slate-900 text-white">
+        {/* 5. PARTNERS & AYUSHMAN BHARAT SCHEME */}
+        <section className="py-16 bg-slate-900 text-white overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
-              <div>
-                <span className="bg-emerald-900 text-emerald-300 text-[10px] font-bold px-3 py-1 rounded-full uppercase border border-emerald-700">
-                  CASHLESS SCHEMES & EMPANELMENTS
-                </span>
-                <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight mt-2">
-                  BSKY Odisha & Insurance Partners
-                </h2>
+            <ScrollReveal direction="up">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+                <div>
+                  <span className="bg-emerald-900 text-emerald-300 text-[10px] font-bold px-3 py-1 rounded-full uppercase border border-emerald-700">
+                    CASHLESS SCHEMES & EMPANELMENTS
+                  </span>
+                  <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight mt-2">
+                    Ayushman Bharat & Insurance Partners
+                  </h2>
+                </div>
+                <Link
+                  to="/pmjay-scheme"
+                  className="bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-extrabold px-5 py-2.5 rounded-xl shadow-lg transition-colors flex items-center gap-1.5"
+                >
+                  Learn About PM-JAY Scheme <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
-              <Link
-                to="/bsky-scheme"
-                className="bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-extrabold px-5 py-2.5 rounded-xl shadow-lg transition-colors flex items-center gap-1.5"
-              >
-                Learn About BSKY Scheme <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
+            </ScrollReveal>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="bg-white text-slate-900 p-5 rounded-2xl shadow-lg flex items-center gap-4 border-l-4 border-emerald-500">
-                <div className="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center font-black text-emerald-700 text-base border border-emerald-200">
-                  BSKY
+              <ScrollReveal delay={100} direction="up">
+                <div className="bg-white text-slate-900 p-5 rounded-2xl shadow-lg flex items-center gap-4 border-l-4 border-emerald-500 hover:shadow-2xl transition-all transform hover:-translate-y-1">
+                  <div className="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center font-black text-emerald-700 text-xs border border-emerald-200">
+                    PM-JAY
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-xs">Ayushman Bharat Yojana (PM-JAY)</h4>
+                    <p className="text-[10px] text-slate-500">Government Cashless Health Card</p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-bold text-xs">Biju Swasthya Kalyan Yojana (BSKY)</h4>
-                  <p className="text-[10px] text-slate-500">Odisha Government Cashless Health Card</p>
-                </div>
-              </div>
+              </ScrollReveal>
 
-              <div className="bg-white text-slate-900 p-5 rounded-2xl shadow-lg flex items-center gap-4 border-l-4 border-blue-500">
-                <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center font-black text-blue-600 text-xs border border-blue-200">
-                  LIC
+              <ScrollReveal delay={200} direction="up">
+                <div className="bg-white text-slate-900 p-5 rounded-2xl shadow-lg flex items-center gap-4 border-l-4 border-blue-500 hover:shadow-2xl transition-all transform hover:-translate-y-1">
+                  <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center font-black text-blue-600 text-xs border border-blue-200">
+                    LIC
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-xs">Life Insurance Corporation (LIC)</h4>
+                    <p className="text-[10px] text-slate-500">Empanelled Health Partner</p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-bold text-xs">Life Insurance Corporation (LIC)</h4>
-                  <p className="text-[10px] text-slate-500">Empanelled Health Partner</p>
-                </div>
-              </div>
+              </ScrollReveal>
 
-              <div className="bg-white text-slate-900 p-5 rounded-2xl shadow-lg flex items-center gap-4 border-l-4 border-purple-500">
-                <div className="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center font-black text-purple-600 text-xs border border-purple-200">
-                  PNB
+              <ScrollReveal delay={300} direction="up">
+                <div className="bg-white text-slate-900 p-5 rounded-2xl shadow-lg flex items-center gap-4 border-l-4 border-purple-500 hover:shadow-2xl transition-all transform hover:-translate-y-1">
+                  <div className="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center font-black text-purple-600 text-xs border border-purple-200">
+                    PNB
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-xs">Punjab National Bank (PNB)</h4>
+                    <p className="text-[10px] text-slate-500">Corporate Empanelled Partner</p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-bold text-xs">Punjab National Bank (PNB)</h4>
-                  <p className="text-[10px] text-slate-500">Corporate Empanelled Partner</p>
-                </div>
-              </div>
+              </ScrollReveal>
             </div>
           </div>
         </section>
 
         {/* 6. ULTIMATE REVIEWS (AUTHENTIC ODISHA PATIENT FEEDBACK SLIDER) */}
         <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
-            <div>
-              <span className="text-[11px] font-extrabold uppercase tracking-widest text-blue-600 block mb-1">PATIENT FEEDBACK</span>
-              <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                PATIENT REVIEWS & RECOVERY STORIES
-              </h2>
-              <p className="text-xs text-slate-500 mt-1">Real experiences shared by patients across Odisha</p>
-            </div>
+          <ScrollReveal direction="up">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
+              <div>
+                <span className="text-[11px] font-extrabold uppercase tracking-widest text-blue-600 block mb-1">PATIENT FEEDBACK</span>
+                <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
+                  PATIENT REVIEWS & RECOVERY STORIES
+                </h2>
+                <p className="text-xs text-slate-500 mt-1">Real experiences shared by patients across Odisha</p>
+              </div>
 
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setReviewIndex((prev) => (prev === 0 ? odishaReviews.length - 1 : prev - 1))}
-                className="p-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 transition-colors shadow-sm"
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => setReviewIndex((prev) => (prev + 1) % odishaReviews.length)}
-                className="p-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 transition-colors shadow-sm"
-              >
-                <ChevronRight className="w-5 h-5" />
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setReviewIndex((prev) => (prev === 0 ? odishaReviews.length - 1 : prev - 1))}
+                  className="p-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 transition-colors shadow-sm cursor-pointer"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => setReviewIndex((prev) => (prev + 1) % odishaReviews.length)}
+                  className="p-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 transition-colors shadow-sm cursor-pointer"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {odishaReviews.slice(reviewIndex, reviewIndex + 3).concat(
@@ -572,60 +822,67 @@ export default function Home() {
                 ? odishaReviews.slice(0, (reviewIndex + 3) % odishaReviews.length)
                 : []
             ).slice(0, 3).map((rev, idx) => (
-              <div
-                key={idx}
-                className="bg-white p-6 rounded-3xl border-2 border-emerald-500/60 shadow-lg relative flex flex-col justify-between hover:shadow-xl transition-all"
-              >
-                <p className="text-xs text-slate-700 leading-relaxed font-medium mb-6 italic">
-                  "{rev.text}"
-                </p>
-                <div>
-                  <div className="flex text-amber-400 text-xs mb-1">
-                    {"★".repeat(rev.rating)}
+              <ScrollReveal key={idx} delay={idx * 150} direction="up">
+                <div
+                  className="bg-white p-6 rounded-3xl border-2 border-emerald-500/60 shadow-lg relative flex flex-col justify-between hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 h-full"
+                >
+                  <p className="text-xs text-slate-700 leading-relaxed font-medium mb-6 italic">
+                    "{rev.text}"
+                  </p>
+                  <div>
+                    <div className="flex text-amber-400 text-xs mb-1">
+                      {"★".repeat(rev.rating)}
+                    </div>
+                    <h4 className="font-extrabold text-sm text-slate-900">{rev.name}</h4>
+                    <p className="text-[10px] text-slate-500 font-semibold">{rev.location}</p>
                   </div>
-                  <h4 className="font-extrabold text-sm text-slate-900">{rev.name}</h4>
-                  <p className="text-[10px] text-slate-500 font-semibold">{rev.location}</p>
                 </div>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         </section>
 
         {/* 7. ENQUIRE NOW FORM */}
-        <section className="py-16 bg-slate-100/70 border-t border-slate-200">
+        <section className="py-16 bg-slate-100/70 border-t border-slate-200 overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-              <div className="lg:col-span-5 bg-slate-900 text-white p-8 rounded-3xl shadow-2xl relative overflow-hidden">
-                <div className="w-14 h-14 rounded-2xl bg-emerald-500 text-white flex items-center justify-center mb-6">
-                  <Stethoscope className="w-7 h-7" />
-                </div>
-                <h3 className="text-2xl font-black text-white">ENQUIRE NOW!</h3>
-                <p className="text-xs text-slate-300 mt-2">
-                  Please fill in your details — our clinical team at Patia will contact you shortly.
-                </p>
+              <div className="lg:col-span-5">
+                <ScrollReveal direction="left">
+                  <div className="bg-slate-900 text-white p-8 rounded-3xl shadow-2xl relative overflow-hidden">
+                    <div className="w-14 h-14 rounded-2xl bg-emerald-500 text-white flex items-center justify-center mb-6">
+                      <Stethoscope className="w-7 h-7" />
+                    </div>
+                    <h3 className="text-2xl font-black text-white">ENQUIRE NOW!</h3>
+                    <p className="text-xs text-slate-300 mt-2">
+                      Please fill in your details — our clinical team at Patia will contact you shortly.
+                    </p>
 
-                <div className="mt-8 pt-6 border-t border-slate-800 text-xs space-y-2">
-                  <p className="text-slate-400 font-bold uppercase text-[10px]">OPD Consultation Schedule</p>
-                  <p className="font-bold text-sm text-emerald-400">Mon–Sat 9:00 am - 6:00 pm</p>
-                  <p className="text-slate-400 text-[11px]">OMFED Square, Patia, Bhubaneswar, Odisha 751024</p>
-                </div>
+                    <div className="mt-8 pt-6 border-t border-slate-800 text-xs space-y-2">
+                      <p className="text-slate-400 font-bold uppercase text-[10px]">OPD Consultation Schedule</p>
+                      <p className="font-bold text-sm text-emerald-400">Mon–Sat 9:00 am - 6:00 pm</p>
+                      <p className="text-slate-400 text-[11px]">OMFED Square, Patia, Bhubaneswar, Odisha 751024</p>
+                    </div>
+                  </div>
+                </ScrollReveal>
               </div>
 
-              <div className="lg:col-span-7 bg-white p-8 rounded-3xl border border-slate-200 shadow-xl">
-                <form onSubmit={handleEnquirySubmit} className="space-y-4 text-xs">
-                  <div>
-                    <label className="block font-bold text-slate-800 mb-1">Type of Service *</label>
-                    <select
-                      value={enquiry.serviceType}
-                      onChange={(e) => setEnquiry({ ...enquiry, serviceType: e.target.value })}
-                      className="w-full p-3 border border-slate-200 rounded-xl font-semibold bg-slate-50 focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="OPD Consultation">OPD Doctor Consultation</option>
-                      <option value="Health Checkup Package">Executive Health Checkup Package</option>
-                      <option value="BSKY Odisha Query">BSKY Odisha Government Scheme Query</option>
-                      <option value="Diagnostic & Lab Test">Diagnostic & Lab Test</option>
-                    </select>
-                  </div>
+              <div className="lg:col-span-7">
+                <ScrollReveal direction="right">
+                  <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-xl">
+                    <form onSubmit={handleEnquirySubmit} className="space-y-4 text-xs">
+                      <div>
+                        <label className="block font-bold text-slate-800 mb-1">Type of Service *</label>
+                        <select
+                          value={enquiry.serviceType}
+                          onChange={(e) => setEnquiry({ ...enquiry, serviceType: e.target.value })}
+                          className="w-full p-3 border border-slate-200 rounded-xl font-semibold bg-slate-50 focus:ring-2 focus:ring-blue-500"
+                        >
+                          <option value="OPD Consultation">OPD Doctor Consultation</option>
+                          <option value="Health Checkup Package">Executive Health Checkup Package</option>
+                          <option value="Ayushman Bharat PM-JAY Query">Ayushman Bharat PM-JAY Government Scheme Query</option>
+                          <option value="Diagnostic & Lab Test">Diagnostic & Lab Test</option>
+                        </select>
+                      </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
@@ -671,9 +928,11 @@ export default function Home() {
                   </button>
                 </form>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
-        </section>
+        </div>
+      </div>
+    </section>
       </main>
 
       {/* 8. REUSABLE FOOTER */}

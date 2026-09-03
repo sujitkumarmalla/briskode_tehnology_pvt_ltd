@@ -8,18 +8,32 @@ function About() {
           
           {/* Visual Column */}
           <div className="lg:col-span-5 relative">
-            <div className="rounded-2xl overflow-hidden shadow-md border border-emerald-200 relative">
+            <div className="rounded-2xl overflow-hidden shadow-xl border border-emerald-200 relative group">
               <img
                 src={hospitalConfig.aboutImage}
                 alt={`${hospitalConfig.name} Modern Facility`}
-                className="w-full h-[380px] object-cover"
+                className="w-full h-[420px] object-cover group-hover:scale-105 transition-transform duration-700 brightness-90"
                 onError={(e) => {
                   e.target.src = "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=800";
                 }}
               />
-              <div className="absolute top-4 right-4 bg-emerald-700 text-white p-3 rounded-xl shadow-md text-center">
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/30 to-transparent"></div>
+
+              <div className="absolute top-4 right-4 bg-emerald-700/90 text-white p-3 rounded-xl shadow-md text-center backdrop-blur-sm border border-emerald-400/30">
                 <span className="block text-xl font-black">25+</span>
                 <span className="text-[9px] font-extrabold uppercase tracking-wider block">Years Trust</span>
+              </div>
+
+              {/* Stylish Quote & Meaning Overlay */}
+              <div className="absolute bottom-4 left-4 right-4 bg-slate-950/85 border border-emerald-500/30 backdrop-blur-md p-4 rounded-xl text-white space-y-1.5 shadow-xl">
+                <span className="font-great-vibes text-xl text-amber-300 block">The Art of Medicine</span>
+                <p className="font-playfair italic text-xs sm:text-sm text-emerald-50 leading-relaxed">
+                  “Medicine is a science of uncertainty and an art of probability, but compassionate care is a universal truth.”
+                </p>
+                <p className="font-cormorant italic text-[11px] text-emerald-200/90 border-t border-emerald-500/20 pt-1.5 mt-1">
+                  <span className="not-italic font-bold font-sans text-amber-400 text-[10px] uppercase mr-1">Meaning:</span>
+                  Dedication to saving lives and serving humanity with heartfelt warmth.
+                </p>
               </div>
             </div>
           </div>

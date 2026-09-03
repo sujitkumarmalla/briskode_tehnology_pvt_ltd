@@ -21,6 +21,7 @@ function AboutPage() {
           <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]">
             About Capital Public Seva
           </h1>
+          
           <p className="text-xs sm:text-sm text-slate-100 max-w-2xl mx-auto leading-relaxed font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
             Delivering advanced clinical care with uncompromising ethics, modern infrastructure, and compassionate patient outcomes since 2001.
           </p>
@@ -53,7 +54,6 @@ function AboutPage() {
                 Equipped with HEPA air filtration laminar flow systems, advanced endoscopic towers, and robotic surgical suites.
               </p>
             </div>
-
             <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-3">
               <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-lg">
                 02
