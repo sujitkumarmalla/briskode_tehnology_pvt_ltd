@@ -3,6 +3,7 @@ import API from "../../utils/api";
 import DataTable from "../../components/common/DataTable";
 import Modal from "../../components/common/Modal";
 import StatusBadge from "../../components/common/StatusBadge";
+import CloudinaryUpload from "../../components/common/CloudinaryUpload";
 import { Plus, Edit, Trash2, UserPlus, Stethoscope } from "lucide-react";
 import { toast } from "react-toastify";
 
@@ -23,7 +24,8 @@ export default function DoctorManagement() {
     qualification: "",
     experience: "",
     consultationFee: 500,
-    workingHours: "09:00 AM - 05:00 PM"
+    workingHours: "09:00 AM - 05:00 PM",
+    profileImage: ""
   });
 
   const fetchData = async () => {
@@ -57,7 +59,8 @@ export default function DoctorManagement() {
       qualification: "MBBS, MD",
       experience: "5 Years",
       consultationFee: 500,
-      workingHours: "09:00 AM - 05:00 PM"
+      workingHours: "09:00 AM - 05:00 PM",
+      profileImage: ""
     });
     setIsModalOpen(true);
   };
@@ -74,7 +77,8 @@ export default function DoctorManagement() {
       qualification: doc.qualification || "",
       experience: doc.experience || "",
       consultationFee: doc.consultationFee || 500,
-      workingHours: doc.workingHours || "09:00 AM - 05:00 PM"
+      workingHours: doc.workingHours || "09:00 AM - 05:00 PM",
+      profileImage: doc.profileImage || ""
     });
     setIsModalOpen(true);
   };
@@ -102,13 +106,25 @@ export default function DoctorManagement() {
     }
   };
 
-  const handleToggleActive = async (id, currentStatus) => {
+  const handleToggleLeaveStatus = async (id, currentStatus, name) => {
     try {
       await API.put(`/users/${id}`, { isActive: !currentStatus });
-      toast.success(currentStatus ? "Doctor account deactivated" : "Doctor account activated");
+      toast.success(!currentStatus ? `${name} status set to Active` : `${name} set to On Leave (Deactivated)`);
       fetchData();
     } catch (err) {
       toast.error("Failed to update status");
+    }
+  };
+
+  const handleResignDoctor = async (id, name) => {
+    if (window.confirm(`Are you sure Dr. ${name} has RESIGNED?\n\nThis will permanently delete their account from MongoDB database and remove them from all hospital listings.`)) {
+      try {
+        await API.delete(`/users/${id}`);
+        toast.success(`Dr. ${name} marked as Resigned & permanently deleted from MongoDB`);
+        fetchData();
+      } catch (err) {
+        toast.error("Failed to delete resigned doctor profile");
+      }
     }
   };
 
@@ -154,15 +170,15 @@ export default function DoctorManagement() {
     {
       header: "Status",
       cell: (row) => (
-        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${row.isActive ? "bg-emerald-100 text-emerald-800" : "bg-red-100 text-red-800"}`}>
-          {row.isActive ? "Active" : "Inactive"}
+        <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${row.isActive ? "bg-emerald-100 text-emerald-800 border border-emerald-300" : "bg-amber-100 text-amber-800 border border-amber-300"}`}>
+          {row.isActive ? "Active (Available)" : "On Leave (Inactive)"}
         </span>
       )
     },
     {
       header: "Actions",
       cell: (row) => (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           <button
             onClick={() => handleOpenEditModal(row)}
             className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
@@ -170,12 +186,27 @@ export default function DoctorManagement() {
           >
             <Edit className="w-4 h-4" />
           </button>
+          
+          {/* Deactivate / Set On Leave Toggle */}
           <button
-            onClick={() => handleToggleActive(row._id, row.isActive)}
-            className={`p-1.5 rounded-lg transition-colors ${row.isActive ? "text-red-600 hover:bg-red-50" : "text-emerald-600 hover:bg-emerald-50"}`}
-            title={row.isActive ? "Deactivate" : "Activate"}
+            onClick={() => handleToggleLeaveStatus(row._id, row.isActive, row.name)}
+            className={`px-2 py-1 text-[11px] font-bold rounded-lg transition-colors flex items-center gap-1 ${
+              row.isActive
+                ? "bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-200"
+                : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200"
+            }`}
+            title={row.isActive ? "Deactivate (Set On Leave - Still exists in DB)" : "Activate Doctor"}
           >
-            <Trash2 className="w-4 h-4" />
+            {row.isActive ? "On Leave" : "Activate"}
+          </button>
+
+          {/* Resign & Permanent Delete from MongoDB */}
+          <button
+            onClick={() => handleResignDoctor(row._id, row.name)}
+            className="px-2 py-1 text-[11px] font-bold text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 rounded-lg transition-colors flex items-center gap-1"
+            title="Resign Doctor (Permanently delete from MongoDB)"
+          >
+            <Trash2 className="w-3.5 h-3.5" /> Resign
           </button>
         </div>
       )
@@ -284,14 +315,11 @@ export default function DoctorManagement() {
                 className="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Working Hours</label>
-              <input
-                type="text"
-                value={formData.workingHours}
-                onChange={(e) => setFormData({ ...formData, workingHours: e.target.value })}
-                placeholder="09:00 AM - 05:00 PM"
-                className="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500"
+            <div className="sm:col-span-2 bg-slate-50 p-3 rounded-2xl border border-slate-200">
+              <CloudinaryUpload
+                value={formData.profileImage}
+                onChange={(url) => setFormData({ ...formData, profileImage: url })}
+                label="Doctor Profile Photo (Cloudinary Upload)"
               />
             </div>
           </div>

@@ -102,9 +102,6 @@ export default function DoctorsPage() {
         {/* Header */}
         <section className="bg-[#1b365d] text-white py-16 px-4 sm:px-6 lg:px-8 border-b border-blue-900">
           <div className="max-w-7xl mx-auto space-y-3">
-            <span className="bg-teal-500/20 text-teal-300 text-xs font-extrabold px-3 py-1 rounded-full border border-teal-400/40 uppercase">
-              BRISKODE HOSPITAL DOCTOR DIRECTORY
-            </span>
             <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white">
               Senior Consultants & Specialists
             </h1>
@@ -157,6 +154,7 @@ export default function DoctorsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {filteredDoctors.map((doc) => {
                 const deptName = doc.department?.name || "General Medicine";
+                const isOnLeave = doc.isActive === false || doc.status === "On Leave";
                 return (
                   <div key={doc._id} className="bg-white rounded-3xl border border-slate-200 shadow-md hover:shadow-xl transition-all overflow-hidden flex flex-col justify-between group">
                     <div>
@@ -167,17 +165,21 @@ export default function DoctorsPage() {
                           className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                         {/* Visible Text Overlay Badge on Picture */}
-                        <div className="absolute top-2.5 left-2.5 bg-slate-950/80 backdrop-blur-md text-white text-[10px] font-extrabold px-3 py-1 rounded-full border border-white/20 shadow-md flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                          <span>{deptName} • OPD Available</span>
-                        </div>
+                       
                         {/* Fee Badge Overlay on Picture Bottom */}
                         <div className="absolute bottom-2.5 right-2.5 bg-blue-600/90 backdrop-blur-md text-white text-[10px] font-black px-2.5 py-1 rounded-lg border border-blue-400/30 shadow-md">
                           ₹{doc.consultationFee || 500}
                         </div>
                       </div>
                       <div className="p-5 space-y-2">
-                        <h3 className="font-extrabold text-base text-slate-900">{doc.name}</h3>
+                        <div className="flex items-center justify-between">
+                          <h3 className="font-extrabold text-base text-slate-900">{doc.name}</h3>
+                          {isOnLeave && (
+                            <span className="text-[10px] font-extrabold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full border border-amber-300">
+                              On Leave
+                            </span>
+                          )}
+                        </div>
                         <p className="text-xs font-bold text-blue-600">{deptName}</p>
                         <p className="text-[11px] text-slate-600 font-medium">{doc.specialization}</p>
                         <p className="text-[10px] text-slate-400">{doc.qualification || "MD, MBBS"}</p>
@@ -190,12 +192,21 @@ export default function DoctorsPage() {
                     </div>
 
                     <div className="p-4 bg-slate-50 border-t border-slate-100">
-                      <Link
-                        to="/contact"
-                        className="w-full py-2.5 px-3 bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-extrabold text-xs rounded-xl shadow-sm flex items-center justify-center gap-1.5 transition-all"
-                      >
-                        <Calendar className="w-4 h-4 text-slate-950" /> Book OPD Pass
-                      </Link>
+                      {isOnLeave ? (
+                        <button
+                          disabled
+                          className="w-full py-2.5 px-3 bg-slate-200 text-slate-500 font-bold text-xs rounded-xl shadow-none cursor-not-allowed flex items-center justify-center gap-1.5"
+                        >
+                          <Clock className="w-4 h-4" /> Doctor On Leave
+                        </button>
+                      ) : (
+                        <Link
+                          to="/contact"
+                          className="w-full py-2.5 px-3 bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-extrabold text-xs rounded-xl shadow-sm flex items-center justify-center gap-1.5 transition-all"
+                        >
+                          <Calendar className="w-4 h-4 text-slate-950" /> Book OPD Pass
+                        </Link>
+                      )}
                     </div>
                   </div>
                 );

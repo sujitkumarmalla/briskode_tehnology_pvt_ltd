@@ -193,6 +193,7 @@ export const updateStaff = async (req, res) => {
       consultationFee,
       availableDays,
       workingHours,
+      profileImage,
       isActive,
       password
     } = req.body;
@@ -214,6 +215,7 @@ export const updateStaff = async (req, res) => {
     if (consultationFee !== undefined) user.consultationFee = consultationFee;
     if (availableDays) user.availableDays = availableDays;
     if (workingHours) user.workingHours = workingHours;
+    if (profileImage) user.profileImage = profileImage;
     if (isActive !== undefined) user.isActive = isActive;
 
     if (password && password.trim().length > 0) {
@@ -274,7 +276,12 @@ export const deleteStaff = async (req, res) => {
     }
 
     if (user.role === "DOCTOR") {
-      await Doctor.findOneAndDelete({ email: user.email }).catch(err => console.error(err.message));
+      await Doctor.deleteMany({
+        $or: [
+          { email: user.email.toLowerCase().trim() },
+          { name: user.name }
+        ]
+      }).catch(err => console.error("Doctor collection delete notice:", err.message));
     }
 
     await User.findByIdAndDelete(id);
@@ -283,9 +290,9 @@ export const deleteStaff = async (req, res) => {
       user: req.user?._id,
       userName: req.user?.name || "Admin",
       userRole: req.user?.role || "ADMIN",
-      action: "DELETE_STAFF",
+      action: "RESIGN_DELETE_STAFF",
       module: "STAFF_MANAGEMENT",
-      details: `Deleted ${user.role} account: ${user.name} (${user.empId})`
+      details: `Permanently deleted resigned ${user.role} account from MongoDB: ${user.name} (${user.empId})`
     }).catch(err => console.error(err.message));
 
     return res.status(200).json({ success: true, message: "Staff deleted successfully." });

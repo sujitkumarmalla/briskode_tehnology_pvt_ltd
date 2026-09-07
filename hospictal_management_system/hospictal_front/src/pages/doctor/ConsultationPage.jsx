@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import API from "../../utils/api";
 import Modal from "../../components/common/Modal";
-import { Stethoscope, Pill, FlaskConical, Plus, Trash2, CheckCircle2, AlertCircle } from "lucide-react";
+import PrintableLabReport from "../../components/common/PrintableLabReport";
+import { Stethoscope, Pill, FlaskConical, Plus, Trash2, CheckCircle2, AlertCircle, Eye, FileText } from "lucide-react";
 import { toast } from "react-toastify";
 
 export default function ConsultationPage() {
@@ -13,6 +14,8 @@ export default function ConsultationPage() {
   const [selectedAppointment, setSelectedAppointment] = useState(location.state?.appointment || null);
   const [medicinesCatalog, setMedicinesCatalog] = useState([]);
   const [labCatalog, setLabCatalog] = useState([]);
+  const [patientLabResults, setPatientLabResults] = useState([]);
+  const [selectedLabReport, setSelectedLabReport] = useState(null);
 
   // Form State
   const [vitals, setVitals] = useState({
@@ -91,6 +94,18 @@ export default function ConsultationPage() {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (selectedAppointment?.patient?._id) {
+      API.get(`/lab/results?patient=${selectedAppointment.patient._id}`)
+        .then(res => {
+          if (res.data.success) setPatientLabResults(res.data.results);
+        })
+        .catch(err => console.error("Lab results fetch error:", err));
+    } else {
+      setPatientLabResults([]);
+    }
+  }, [selectedAppointment]);
 
   const handleAddMedicine = () => {
     if (!rxForm.medicineName) return;
@@ -235,6 +250,45 @@ export default function ConsultationPage() {
               </p>
             </div>
           </div>
+
+          {/* Analyzed Lab Reports Available Banner */}
+          {patientLabResults.length > 0 && (
+            <div className="bg-indigo-50 border border-indigo-200 p-4 rounded-2xl shadow-sm space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-indigo-900 font-bold text-xs">
+                  <FlaskConical className="w-4 h-4 text-indigo-600" />
+                  <span>Completed Diagnostic Lab Reports Available ({patientLabResults.length})</span>
+                </div>
+                <span className="text-[10px] text-indigo-700 font-semibold">Review findings & assign medicine below</span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                {patientLabResults.map((r) => (
+                  <div key={r._id} className="bg-white p-3 rounded-xl border border-indigo-100 flex items-center justify-between">
+                    <div>
+                      <p className="font-bold text-slate-800">{r.testName}</p>
+                      <p className="text-[10px] text-slate-500">Date: {new Date(r.createdAt).toLocaleDateString()} | ID: {r.resultId}</p>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedLabReport(r)}
+                        className="flex items-center gap-1 text-[11px] font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1.5 rounded-lg border border-indigo-200"
+                      >
+                        <Eye className="w-3.5 h-3.5" /> View Report
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setIsRxModalOpen(true)}
+                        className="flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-2.5 py-1.5 rounded-lg border border-emerald-200"
+                      >
+                        <Pill className="w-3.5 h-3.5" /> Assign Medicine
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Vitals Grid */}
           <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm space-y-3">
@@ -568,6 +622,13 @@ export default function ConsultationPage() {
           </div>
         </div>
       </Modal>
+
+      {/* View Lab Report Modal */}
+      {selectedLabReport && (
+        <Modal isOpen={!!selectedLabReport} onClose={() => setSelectedLabReport(null)} title="Diagnostic Report Details" maxWidth="max-w-4xl">
+          <PrintableLabReport result={selectedLabReport} onClose={() => setSelectedLabReport(null)} />
+        </Modal>
+      )}
     </div>
   );
 }

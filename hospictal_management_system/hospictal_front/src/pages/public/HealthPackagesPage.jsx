@@ -63,9 +63,6 @@ export default function HealthPackagesPage() {
         {/* Banner */}
         <section className="bg-[#1b365d] text-white py-16 px-4 sm:px-6 lg:px-8 border-b border-blue-900">
           <div className="max-w-7xl mx-auto space-y-3">
-            <span className="bg-teal-500/20 text-teal-300 text-xs font-extrabold px-3 py-1 rounded-full border border-teal-400/40 uppercase">
-              PREVENTIVE HEALTHCARE
-            </span>
             <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white">
               Executive Health Check Packages
             </h1>

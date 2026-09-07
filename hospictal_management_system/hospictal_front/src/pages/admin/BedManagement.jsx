@@ -4,18 +4,15 @@ import DataTable from "../../components/common/DataTable";
 import Modal from "../../components/common/Modal";
 import StatusBadge from "../../components/common/StatusBadge";
 import StatCard from "../../components/common/StatCard";
-import { BedDouble, Plus, CheckCircle, UserCheck, RefreshCw } from "lucide-react";
+import { BedDouble, Plus, CheckCircle, UserCheck, RefreshCw, AlertCircle, ShieldAlert } from "lucide-react";
 import { toast } from "react-toastify";
 
 export default function BedManagement() {
   const [beds, setBeds] = useState([]);
   const [stats, setStats] = useState({});
-  const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isAllocateModalOpen, setIsAllocateModalOpen] = useState(false);
-  const [selectedBed, setSelectedBed] = useState(null);
 
   const [addFormData, setAddFormData] = useState({
     bedNumber: "",
@@ -24,19 +21,13 @@ export default function BedManagement() {
     chargePerDay: 500
   });
 
-  const [selectedPatientId, setSelectedPatientId] = useState("");
-
   const fetchBeds = async () => {
     try {
-      const [bedRes, patientRes] = await Promise.all([
-        API.get("/beds"),
-        API.get("/patients")
-      ]);
+      const bedRes = await API.get("/beds");
       if (bedRes.data.success) {
         setBeds(bedRes.data.beds);
         setStats(bedRes.data.stats);
       }
-      if (patientRes.data.success) setPatients(patientRes.data.patients);
     } catch (err) {
       toast.error("Failed to load bed occupancy");
     } finally {
@@ -57,29 +48,6 @@ export default function BedManagement() {
       fetchBeds();
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to add bed");
-    }
-  };
-
-  const handleAllocateBed = async (e) => {
-    e.preventDefault();
-    if (!selectedBed || !selectedPatientId) return;
-    try {
-      await API.put(`/beds/${selectedBed._id}/allocate`, { patientId: selectedPatientId });
-      toast.success(`Bed ${selectedBed.bedNumber} allocated to patient`);
-      setIsAllocateModalOpen(false);
-      fetchBeds();
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to allocate bed");
-    }
-  };
-
-  const handleReleaseBed = async (id, bedNum) => {
-    try {
-      await API.put(`/beds/${id}/release`);
-      toast.success(`Bed ${bedNum} released`);
-      fetchBeds();
-    } catch (err) {
-      toast.error("Failed to release bed");
     }
   };
 
@@ -116,35 +84,27 @@ export default function BedManagement() {
       ) : <span className="text-slate-400 font-medium">Unassigned</span>
     },
     {
-      header: "Actions",
+      header: "Allocation Handler",
       cell: (row) => (
-        <div>
-          {row.status === "Available" ? (
-            <button
-              onClick={() => {
-                setSelectedBed(row);
-                setSelectedPatientId(patients[0]?._id || "");
-                setIsAllocateModalOpen(true);
-              }}
-              className="px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
-            >
-              Allocate Bed
-            </button>
-          ) : row.status === "Occupied" ? (
-            <button
-              onClick={() => handleReleaseBed(row._id, row.bedNumber)}
-              className="px-3 py-1.5 text-xs font-semibold text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-colors"
-            >
-              Release Bed
-            </button>
-          ) : null}
-        </div>
+        <span className="text-[11px] font-semibold text-teal-700 bg-teal-50 px-2.5 py-1 rounded-lg border border-teal-200">
+          Reception Desk Only
+        </span>
       )
     }
   ];
 
   return (
     <div className="space-y-6">
+      {/* Notice Banner: Receptionist handles bed assignments */}
+      <div className="bg-teal-50 border-l-4 border-teal-500 p-4 rounded-2xl flex items-center justify-between text-xs text-teal-900 shadow-sm">
+        <div className="flex items-center gap-2 font-medium">
+          <AlertCircle className="w-5 h-5 text-teal-600 flex-shrink-0" />
+          <span>
+            <strong>Receptionist Desk Authorization:</strong> Patient bed assignment and allocation is managed exclusively by Receptionists at Check-In/Registration. Admin controls ward infrastructure & bed creation.
+          </span>
+        </div>
+      </div>
+
       {/* Occupancy Stats Header */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard title="Total Hospital Beds" value={stats.total || 0} icon={BedDouble} color="blue" />
@@ -233,39 +193,7 @@ export default function BedManagement() {
           </div>
         </form>
       </Modal>
-
-      {/* Allocate Bed Modal */}
-      <Modal isOpen={isAllocateModalOpen} onClose={() => setIsAllocateModalOpen(false)} title={`Allocate Bed ${selectedBed?.bedNumber}`}>
-        <form onSubmit={handleAllocateBed} className="space-y-4 text-xs">
-          <div>
-            <label className="block font-semibold text-slate-700 mb-1">Select Patient *</label>
-            <select
-              value={selectedPatientId}
-              onChange={(e) => setSelectedPatientId(e.target.value)}
-              className="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500"
-            >
-              {patients.map((p) => (
-                <option key={p._id} value={p._id}>
-                  {p.name} ({p.patientId}) - {p.phone}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
-            <button
-              type="button"
-              onClick={() => setIsAllocateModalOpen(false)}
-              className="px-4 py-2 font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl"
-            >
-              Cancel
-            </button>
-            <button type="submit" className="px-5 py-2 font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl">
-              Confirm Bed Allocation
-            </button>
-          </div>
-        </form>
-      </Modal>
     </div>
   );
 }
+

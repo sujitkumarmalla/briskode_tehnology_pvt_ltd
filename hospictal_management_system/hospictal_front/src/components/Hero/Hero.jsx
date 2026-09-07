@@ -154,14 +154,7 @@ function Hero() {
 
                   {/* Meaning in Cormorant Garamond Serif Font */}
                   <div className="pt-2 border-t border-emerald-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                    <div className="flex items-start space-x-2">
-                      <span className="shrink-0 mt-0.5 text-amber-400 text-xs font-bold font-sans uppercase tracking-wider bg-amber-400/10 border border-amber-400/30 px-1.5 py-0.5 rounded">
-                        Meaning
-                      </span>
-                      <p className="font-cormorant italic text-sm sm:text-base text-emerald-100 font-medium leading-tight">
-                        {currentQuote.meaning}
-                      </p>
-                    </div>
+                   
 
                     {/* Pagination Dot Controls */}
                     <div className="flex items-center space-x-1.5 self-end sm:self-center shrink-0">

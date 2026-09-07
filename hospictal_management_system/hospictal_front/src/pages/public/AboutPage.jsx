@@ -14,9 +14,6 @@ export default function AboutPage() {
         {/* Banner Section */}
         <section className="bg-slate-950 text-white py-16 px-4 sm:px-6 lg:px-8 border-b border-slate-800 relative overflow-hidden">
           <div className="max-w-7xl mx-auto space-y-4">
-            <span className="bg-blue-900/80 text-blue-300 text-xs font-extrabold px-3 py-1 rounded-full border border-blue-700 uppercase">
-              ABOUT BRISKODE PUBLIC HOSPITAL
-            </span>
             <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white">
               Pioneering World-Class Healthcare in Odisha
             </h1>

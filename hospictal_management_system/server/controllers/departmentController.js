@@ -24,7 +24,7 @@ export const getDepartments = async (req, res) => {
 
 export const createDepartment = async (req, res) => {
   try {
-    const { name, description, head } = req.body;
+    const { name, description, head, image } = req.body;
     if (!name) {
       return res.status(400).json({ message: "Department name is required." });
     }
@@ -37,7 +37,8 @@ export const createDepartment = async (req, res) => {
     const department = await Department.create({
       name: name.trim(),
       description,
-      head: head || undefined
+      head: head || undefined,
+      image: image || undefined
     });
 
     return res.status(201).json({ success: true, message: "Department created.", department });

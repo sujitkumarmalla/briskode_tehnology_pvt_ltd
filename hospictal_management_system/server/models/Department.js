@@ -16,6 +16,10 @@ const departmentSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User"
     },
+    image: {
+      type: String,
+      default: ""
+    },
     isActive: {
       type: Boolean,
       default: true

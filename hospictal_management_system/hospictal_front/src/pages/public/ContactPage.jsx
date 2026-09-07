@@ -30,9 +30,6 @@ export default function ContactPage() {
         {/* Header */}
         <section className="bg-slate-950 text-white py-16 px-4 sm:px-6 lg:px-8 border-b border-slate-800">
           <div className="max-w-7xl mx-auto space-y-3">
-            <span className="bg-blue-900/80 text-blue-300 text-xs font-extrabold px-3 py-1 rounded-full border border-blue-700 uppercase">
-              REACH US IN BHUBANESWAR
-            </span>
             <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white">
               Contact & Location Details
             </h1>

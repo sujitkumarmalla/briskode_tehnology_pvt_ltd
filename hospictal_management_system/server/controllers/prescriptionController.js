@@ -67,7 +67,7 @@ export const getPrescriptions = async (req, res) => {
     if (status) filter.status = status;
 
     // If doctor role and no explicit patient filter, default to doctor's prescriptions
-    if (req.user.role === "DOCTOR" && !patient) {
+    if (req.user.role?.toUpperCase() === "DOCTOR" && !patient) {
       filter.doctor = req.user._id;
     }
 

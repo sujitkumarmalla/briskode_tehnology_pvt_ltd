@@ -85,7 +85,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link to="/login" className="hover:text-teal-300 transition-colors flex items-center gap-1 text-blue-400 font-bold">
-                  <Lock className="w-3.5 h-3.5 text-blue-400" /> Staff Login Portal
+                  <Lock className="w-3.5 h-3.5 text-blue-400" />Login Portal
                 </Link>
               </li>
             </ul>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import API from "../../utils/api";
 import DataTable from "../../components/common/DataTable";
 import Modal from "../../components/common/Modal";
+import CloudinaryUpload from "../../components/common/CloudinaryUpload";
 import { Plus, Edit, Trash2, Users } from "lucide-react";
 import { toast } from "react-toastify";
 
@@ -19,7 +20,8 @@ export default function StaffManagement() {
     password: "",
     role: "RECEPTIONIST",
     department: "",
-    specialization: ""
+    specialization: "",
+    profileImage: ""
   });
 
   const fetchStaff = async () => {
@@ -53,7 +55,8 @@ export default function StaffManagement() {
       password: "hospital123",
       role: "RECEPTIONIST",
       department: departments[0]?._id || "",
-      specialization: ""
+      specialization: "",
+      profileImage: ""
     });
     setIsModalOpen(true);
   };
@@ -67,7 +70,8 @@ export default function StaffManagement() {
       password: "",
       role: stf.role,
       department: stf.department?._id || "",
-      specialization: stf.specialization || ""
+      specialization: stf.specialization || "",
+      profileImage: stf.profileImage || ""
     });
     setIsModalOpen(true);
   };
@@ -115,9 +119,16 @@ export default function StaffManagement() {
     {
       header: "Staff Member",
       cell: (row) => (
-        <div>
-          <p className="font-bold text-slate-800">{row.name}</p>
-          <p className="text-[10px] text-slate-500">{row.email}</p>
+        <div className="flex items-center gap-3">
+          <img
+            src={row.profileImage || "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=200"}
+            alt={row.name}
+            className="w-8 h-8 rounded-full object-cover border border-slate-200"
+          />
+          <div>
+            <p className="font-bold text-slate-800">{row.name}</p>
+            <p className="text-[10px] text-slate-500">{row.email}</p>
+          </div>
         </div>
       )
     },
@@ -260,6 +271,13 @@ export default function StaffManagement() {
                   <option key={d._id} value={d._id}>{d.name}</option>
                 ))}
               </select>
+            </div>
+            <div className="sm:col-span-2 bg-slate-50 p-3 rounded-2xl border border-slate-200">
+              <CloudinaryUpload
+                value={formData.profileImage}
+                onChange={(url) => setFormData({ ...formData, profileImage: url })}
+                label="Staff Member Photo (Cloudinary Upload)"
+              />
             </div>
           </div>
 

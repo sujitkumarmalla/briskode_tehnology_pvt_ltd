@@ -82,6 +82,11 @@ export const login = async (req, res) => {
     });
   } catch (error) {
     console.error("Login Error:", error);
+    if (error.message?.includes("ENOTFOUND") || error.name === "MongoNetworkError" || error.name === "MongooseServerSelectionError") {
+      return res.status(503).json({
+        message: "Database Connection Error: Unable to reach MongoDB cluster. Please check your internet/DNS connection or local MongoDB server."
+      });
+    }
     return res.status(500).json({ message: error.message || "Server Error" });
   }
 };

@@ -351,10 +351,6 @@ export default function Home() {
                   <div className="lg:col-span-7 space-y-4">
                     {/* Top Tag badge with Cinzel/Great Vibes font */}
                     <div className="flex flex-wrap items-center gap-2.5">
-                      <span className="bg-emerald-950/90 text-emerald-300 font-cinzel text-xs font-bold px-3.5 py-1.5 rounded-full border border-emerald-500/40 shadow-md uppercase tracking-wider flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                        Capital Public Seva
-                      </span>
                       <span className="font-great-vibes text-amber-300 text-xl font-normal drop-shadow">
                         {slide.subtitle}
                       </span>
@@ -405,38 +401,7 @@ export default function Home() {
                   </div>
 
                   {/* Right Column: Glassmorphism Quote Card with Stylish Font & Deep Meaning */}
-                  <div className="lg:col-span-5">
-                    <div className="bg-slate-950/85 border border-emerald-500/40 backdrop-blur-xl rounded-3xl p-6 sm:p-7 shadow-2xl space-y-3.5 relative overflow-hidden">
-                      <div className="absolute -right-8 -top-8 w-28 h-28 bg-emerald-500/15 rounded-full blur-2xl pointer-events-none"></div>
-
-                      <div className="flex items-center justify-between border-b border-emerald-500/20 pb-2.5">
-                        <span className="font-great-vibes text-2xl text-amber-300">Language of Healing</span>
-                        <span className="text-[10px] uppercase font-bold tracking-widest text-emerald-300 bg-emerald-900/90 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">
-                          Deep Meaning
-                        </span>
-                      </div>
-
-                      {/* Stylish Quote in Playfair Display Serif */}
-                      <blockquote className="relative pt-1">
-                        <span className="text-emerald-500/30 font-serif text-5xl leading-none absolute -top-3 -left-3 select-none">“</span>
-                        <p className="font-playfair italic text-white text-base sm:text-lg leading-relaxed pl-3 drop-shadow-md">
-                          {slide.quote}
-                        </p>
-                      </blockquote>
-
-                      {/* Meaning in Cormorant Garamond */}
-                      <div className="pt-2.5 border-t border-emerald-500/20 space-y-1">
-                        <div className="flex items-start gap-2">
-                          <span className="shrink-0 text-amber-400 text-[10px] font-bold font-sans uppercase tracking-wider bg-amber-400/10 border border-amber-400/30 px-1.5 py-0.5 rounded mt-0.5">
-                            Meaning
-                          </span>
-                          <p className="font-cormorant italic text-sm text-emerald-100 font-medium leading-tight">
-                            {slide.meaning}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                 
 
                 </div>
               </div>

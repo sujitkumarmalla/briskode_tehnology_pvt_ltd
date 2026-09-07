@@ -169,7 +169,7 @@ export default function PublicNavbar() {
               to="/login"
               className="hidden sm:flex items-center gap-1.5 bg-blue-950/80 hover:bg-blue-900 text-blue-200 font-bold text-xs px-3.5 py-2.5 rounded-xl border border-blue-700/60 transition-all shadow-sm"
             >
-              <Lock className="w-3.5 h-3.5 text-blue-400" /> Staff Login
+              <Lock className="w-3.5 h-3.5 text-blue-400" /> Login
             </Link>
 
             {/* Glowing Gradient Teal/Green Button matching screenshot */}

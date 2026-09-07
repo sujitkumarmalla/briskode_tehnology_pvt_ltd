@@ -71,7 +71,7 @@ export const getConsultations = async (req, res) => {
     if (patient) filter.patient = patient;
     if (doctor) filter.doctor = doctor;
     // If doctor role, limit to doctor's own consultations unless specified
-    if (req.user.role === "DOCTOR" && !patient) {
+    if (req.user.role?.toUpperCase() === "DOCTOR" && !patient) {
       filter.doctor = req.user._id;
     }
 

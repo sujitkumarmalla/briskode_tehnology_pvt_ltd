@@ -2,8 +2,28 @@ import React, { useState, useEffect } from "react";
 import API from "../../utils/api";
 import DataTable from "../../components/common/DataTable";
 import Modal from "../../components/common/Modal";
+import CloudinaryUpload from "../../components/common/CloudinaryUpload";
 import { Plus, Edit, Trash2, Building2, Stethoscope } from "lucide-react";
 import { toast } from "react-toastify";
+
+const DEFAULT_DEPT_IMAGES = {
+  cardiology: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&q=80&w=400",
+  neurology: "https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&q=80&w=400",
+  gastroenterology: "https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?auto=format&fit=crop&q=80&w=400",
+  nephrology: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=400",
+  oncology: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=400",
+  orthopedics: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&q=80&w=400",
+  pediatrics: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&q=80&w=400"
+};
+
+const getDeptThumb = (dept) => {
+  if (dept.image && dept.image.trim().length > 0) return dept.image;
+  const nameLower = (dept.name || "").toLowerCase();
+  for (const key in DEFAULT_DEPT_IMAGES) {
+    if (nameLower.includes(key)) return DEFAULT_DEPT_IMAGES[key];
+  }
+  return "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?auto=format&fit=crop&q=80&w=400";
+};
 
 export default function DepartmentManagement() {
   const [departments, setDepartments] = useState([]);
@@ -11,7 +31,7 @@ export default function DepartmentManagement() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingDept, setEditingDept] = useState(null);
 
-  const [formData, setFormData] = useState({ name: "", description: "" });
+  const [formData, setFormData] = useState({ name: "", description: "", image: "" });
 
   const fetchDepartments = async () => {
     try {
@@ -30,13 +50,13 @@ export default function DepartmentManagement() {
 
   const handleOpenAdd = () => {
     setEditingDept(null);
-    setFormData({ name: "", description: "" });
+    setFormData({ name: "", description: "", image: "" });
     setIsModalOpen(true);
   };
 
   const handleOpenEdit = (dept) => {
     setEditingDept(dept);
-    setFormData({ name: dept.name, description: dept.description || "" });
+    setFormData({ name: dept.name, description: dept.description || "", image: dept.image || "" });
     setIsModalOpen(true);
   };
 
@@ -63,9 +83,11 @@ export default function DepartmentManagement() {
       accessor: "name",
       cell: (row) => (
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
-            <Building2 className="w-5 h-5" />
-          </div>
+          <img
+            src={getDeptThumb(row)}
+            alt={row.name}
+            className="w-10 h-10 rounded-xl object-cover border border-slate-200 shadow-sm"
+          />
           <div>
             <p className="font-bold text-slate-800">{row.name}</p>
             <p className="text-[10px] text-slate-500">{row.description}</p>
@@ -140,6 +162,14 @@ export default function DepartmentManagement() {
             />
           </div>
 
+          <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200">
+            <CloudinaryUpload
+              value={formData.image}
+              onChange={(url) => setFormData({ ...formData, image: url })}
+              label="Department Cover Photo (Cloudinary Upload)"
+            />
+          </div>
+
           <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
             <button
               type="button"
@@ -160,3 +190,4 @@ export default function DepartmentManagement() {
     </div>
   );
 }
+

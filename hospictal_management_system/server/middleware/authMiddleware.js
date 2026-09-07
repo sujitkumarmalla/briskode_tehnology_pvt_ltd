@@ -38,10 +38,12 @@ export const authorizeRoles = (...roles) => {
     if (!req.user) {
       return res.status(401).json({ message: "Not authorized." });
     }
-    const formattedRoles = roles.map(r => r.toUpperCase());
-    if (!formattedRoles.includes(req.user.role?.toUpperCase())) {
+    const formattedRoles = roles.map(r => String(r).trim().toUpperCase());
+    const userRole = req.user.role ? String(req.user.role).trim().toUpperCase() : "";
+
+    if (!formattedRoles.includes(userRole)) {
       return res.status(403).json({
-        message: `Forbidden: Access restricted to ${roles.join(", ")} role(s).`
+        message: `Forbidden: Access restricted to ${roles.join(", ")} role(s). Current role: ${req.user.role || 'None'}`
       });
     }
     next();
