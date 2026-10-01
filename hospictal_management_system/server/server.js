@@ -18,6 +18,7 @@ import billRoutes from "./routes/billRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
 import auditRoutes from "./routes/auditRoutes.js";
+import wardRoutes from "./routes/wardRoutes.js";
 
 dotenv.config();
 
@@ -51,6 +52,7 @@ app.use("/api/billing", billRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/audit", auditRoutes);
+app.use("/api/wards", wardRoutes);
 
 // Comprehensive Doctors API endpoints (fetching from both User & Doctor models)
 app.get("/api/doctors", async (req, res) => {

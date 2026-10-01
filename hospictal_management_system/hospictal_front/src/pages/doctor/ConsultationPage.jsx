@@ -36,6 +36,11 @@ export default function ConsultationPage() {
   const [prescribedMedicines, setPrescribedMedicines] = useState([]);
   const [labOrders, setLabOrders] = useState([]);
 
+  const [isPharmacySaved, setIsPharmacySaved] = useState(false);
+  const [isLabSaved, setIsLabSaved] = useState(false);
+  const [isSavingPharmacy, setIsSavingPharmacy] = useState(false);
+  const [isSavingLab, setIsSavingLab] = useState(false);
+
   // Modals
   const [isRxModalOpen, setIsRxModalOpen] = useState(false);
   const [isLabModalOpen, setIsLabModalOpen] = useState(false);
@@ -111,22 +116,76 @@ export default function ConsultationPage() {
     if (!rxForm.medicineName) return;
     setPrescribedMedicines([...prescribedMedicines, { ...rxForm }]);
     setIsRxModalOpen(false);
+    setIsPharmacySaved(false);
     toast.info(`Added ${rxForm.medicineName} to prescription`);
   };
 
   const handleRemoveMedicine = (idx) => {
     setPrescribedMedicines(prescribedMedicines.filter((_, i) => i !== idx));
+    setIsPharmacySaved(false);
   };
 
   const handleAddLabOrder = () => {
     if (!labForm.testName) return;
     setLabOrders([...labOrders, { ...labForm }]);
     setIsLabModalOpen(false);
+    setIsLabSaved(false);
     toast.info(`Added ${labForm.testName} to lab requests`);
   };
 
   const handleRemoveLabOrder = (idx) => {
     setLabOrders(labOrders.filter((_, i) => i !== idx));
+    setIsLabSaved(false);
+  };
+
+  const handleSavePharmacy = async () => {
+    if (prescribedMedicines.length === 0 || !selectedAppointment) return;
+    
+    setIsSavingPharmacy(true);
+    try {
+      await API.post("/prescriptions", {
+        patientId: selectedAppointment.patient._id,
+        appointmentId: selectedAppointment._id,
+        medicines: prescribedMedicines.map(m => ({
+          medicine: m.medicineId || undefined,
+          medicineName: m.medicineName,
+          dosage: m.dosage,
+          frequency: m.frequency,
+          duration: m.duration,
+          quantity: Number(m.quantity),
+          instructions: m.instructions
+        }))
+      });
+      setIsPharmacySaved(true);
+      toast.success("Medicines saved to Pharmacy successfully!");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to save pharmacy details");
+    } finally {
+      setIsSavingPharmacy(false);
+    }
+  };
+
+  const handleSaveLab = async () => {
+    if (labOrders.length === 0 || !selectedAppointment) return;
+
+    setIsSavingLab(true);
+    try {
+      for (const lab of labOrders) {
+        await API.post("/lab/requests", {
+          patientId: selectedAppointment.patient._id,
+          appointmentId: selectedAppointment._id,
+          testName: lab.testName,
+          priority: lab.priority,
+          clinicalNotes: lab.clinicalNotes
+        });
+      }
+      setIsLabSaved(true);
+      toast.success("Tests saved to Laboratory successfully!");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to save lab requests");
+    } finally {
+      setIsSavingLab(false);
+    }
   };
 
   const handleSaveConsultation = async (e) => {
@@ -134,9 +193,15 @@ export default function ConsultationPage() {
     if (!selectedAppointment) return toast.error("Please select a patient appointment");
     if (!chiefComplaint || !diagnosis) return toast.error("Chief Complaint and Diagnosis are required");
 
+    if (prescribedMedicines.length > 0 && !isPharmacySaved) {
+      return toast.error("Please save the prescribed medicines for Pharmacy first.");
+    }
+    if (labOrders.length > 0 && !isLabSaved) {
+      return toast.error("Please save the lab requests for Laboratory first.");
+    }
+
     try {
-      // 1. Save Consultation
-      const consultRes = await API.post("/consultations", {
+      await API.post("/consultations", {
         appointmentId: selectedAppointment._id,
         patientId: selectedAppointment.patient._id,
         chiefComplaint,
@@ -146,45 +211,41 @@ export default function ConsultationPage() {
         clinicalNotes,
         treatmentPlan
       });
-
-      const consultId = consultRes.data.consultation._id;
-
-      // 2. Save Prescription if items added
-      if (prescribedMedicines.length > 0) {
-        await API.post("/prescriptions", {
-          patientId: selectedAppointment.patient._id,
-          consultationId: consultId,
-          appointmentId: selectedAppointment._id,
-          medicines: prescribedMedicines.map(m => ({
-            medicine: m.medicineId || undefined,
-            medicineName: m.medicineName,
-            dosage: m.dosage,
-            frequency: m.frequency,
-            duration: m.duration,
-            quantity: Number(m.quantity),
-            instructions: m.instructions
-          }))
-        });
-      }
-
-      // 3. Save Lab Requests if ordered
-      if (labOrders.length > 0) {
-        for (const lab of labOrders) {
-          await API.post("/lab/requests", {
-            patientId: selectedAppointment.patient._id,
-            consultationId: consultId,
-            appointmentId: selectedAppointment._id,
-            testName: lab.testName,
-            priority: lab.priority,
-            clinicalNotes: lab.clinicalNotes
-          });
-        }
-      }
-
+      
       toast.success("Consultation & medical records saved successfully!");
       navigate("/doctor/appointments");
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to save consultation");
+    }
+  };
+
+  const handlePendingConsultation = async () => {
+    if (!selectedAppointment) return toast.error("Please select a patient appointment");
+    
+    try {
+      await API.put(`/appointments/${selectedAppointment._id}/status`, {
+        status: "In Consultation"
+      });
+      toast.success("Consultation marked as Pending.");
+      
+      setSelectedAppointment(null);
+      setPrescribedMedicines([]);
+      setLabOrders([]);
+      setChiefComplaint("");
+      setDiagnosis("");
+      setClinicalNotes("");
+      setTreatmentPlan("");
+      setVitals({
+        bloodPressure: "120/80",
+        heartRate: "75 bpm",
+        temperature: "98.6 °F",
+        weight: "70 kg",
+        height: "170 cm"
+      });
+      setIsPharmacySaved(false);
+      setIsLabSaved(false);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to mark as pending");
     }
   };
 
@@ -206,7 +267,21 @@ export default function ConsultationPage() {
             onChange={(e) => {
               const appt = appointments.find(a => a._id === e.target.value);
               setSelectedAppointment(appt);
-              if (appt?.reason) setChiefComplaint(appt.reason);
+              setChiefComplaint(appt?.reason || "");
+              setPrescribedMedicines([]);
+              setLabOrders([]);
+              setIsPharmacySaved(false);
+              setIsLabSaved(false);
+              setDiagnosis("");
+              setClinicalNotes("");
+              setTreatmentPlan("");
+              setVitals({
+                bloodPressure: "120/80",
+                heartRate: "75 bpm",
+                temperature: "98.6 °F",
+                weight: "70 kg",
+                height: "170 cm"
+              });
             }}
             className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:ring-2 focus:ring-blue-500"
           >
@@ -407,13 +482,31 @@ export default function ConsultationPage() {
                   <Pill className="w-5 h-5 text-emerald-600" />
                   <h3 className="font-bold text-slate-800 text-sm">Prescribed Medicines</h3>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setIsRxModalOpen(true)}
-                  className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-3 py-1.5 rounded-xl shadow-sm transition-colors"
-                >
-                  <Plus className="w-4 h-4" /> Add Medicine
-                </button>
+                <div className="flex items-center gap-2">
+                  {prescribedMedicines.length > 0 && !isPharmacySaved && (
+                    <button
+                      type="button"
+                      onClick={handleSavePharmacy}
+                      disabled={isSavingPharmacy}
+                      className="flex items-center gap-1.5 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs px-3 py-1.5 rounded-xl shadow-sm transition-colors disabled:opacity-50"
+                    >
+                      {isSavingPharmacy ? "Saving..." : "Save for Pharmacy"}
+                    </button>
+                  )}
+                  {isPharmacySaved && prescribedMedicines.length > 0 && (
+                    <span className="flex items-center gap-1 text-xs font-bold text-teal-700 bg-teal-50 px-3 py-1.5 rounded-xl border border-teal-200">
+                      <CheckCircle2 className="w-4 h-4" /> Saved
+                    </span>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setIsRxModalOpen(true)}
+                    disabled={isPharmacySaved}
+                    className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold text-xs px-3 py-1.5 rounded-xl shadow-sm transition-colors"
+                  >
+                    <Plus className="w-4 h-4" /> Add Medicine
+                  </button>
+                </div>
               </div>
 
               <div className="divide-y divide-slate-100 min-h-[100px]">
@@ -426,13 +519,15 @@ export default function ConsultationPage() {
                         <p className="font-bold text-slate-800">{m.medicineName} <span className="text-slate-500 font-normal">({m.dosage})</span></p>
                         <p className="text-[10px] text-slate-500">Freq: {m.frequency} | Duration: {m.duration} | Qty: {m.quantity} ({m.instructions})</p>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveMedicine(i)}
-                        className="text-red-500 hover:text-red-700 p-1"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                      {!isPharmacySaved && (
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveMedicine(i)}
+                          className="text-red-500 hover:text-red-700 p-1"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
                     </div>
                   ))
                 )}
@@ -446,13 +541,31 @@ export default function ConsultationPage() {
                   <FlaskConical className="w-5 h-5 text-indigo-600" />
                   <h3 className="font-bold text-slate-800 text-sm">Laboratory Test Requests</h3>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setIsLabModalOpen(true)}
-                  className="flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-3 py-1.5 rounded-xl shadow-sm transition-colors"
-                >
-                  <Plus className="w-4 h-4" /> Order Test
-                </button>
+                <div className="flex items-center gap-2">
+                  {labOrders.length > 0 && !isLabSaved && (
+                    <button
+                      type="button"
+                      onClick={handleSaveLab}
+                      disabled={isSavingLab}
+                      className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-3 py-1.5 rounded-xl shadow-sm transition-colors disabled:opacity-50"
+                    >
+                      {isSavingLab ? "Saving..." : "Save for Laboratory"}
+                    </button>
+                  )}
+                  {isLabSaved && labOrders.length > 0 && (
+                    <span className="flex items-center gap-1 text-xs font-bold text-blue-700 bg-blue-50 px-3 py-1.5 rounded-xl border border-blue-200">
+                      <CheckCircle2 className="w-4 h-4" /> Saved
+                    </span>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setIsLabModalOpen(true)}
+                    disabled={isLabSaved}
+                    className="flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-bold text-xs px-3 py-1.5 rounded-xl shadow-sm transition-colors"
+                  >
+                    <Plus className="w-4 h-4" /> Order Test
+                  </button>
+                </div>
               </div>
 
               <div className="divide-y divide-slate-100 min-h-[100px]">
@@ -465,13 +578,15 @@ export default function ConsultationPage() {
                         <p className="font-bold text-slate-800">{l.testName}</p>
                         <p className="text-[10px] text-slate-500">Priority: <span className="font-semibold text-amber-700">{l.priority}</span></p>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveLabOrder(i)}
-                        className="text-red-500 hover:text-red-700 p-1"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                      {!isLabSaved && (
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveLabOrder(i)}
+                          className="text-red-500 hover:text-red-700 p-1"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
                     </div>
                   ))
                 )}
@@ -482,10 +597,17 @@ export default function ConsultationPage() {
           {/* Action Submit */}
           <div className="flex justify-end gap-3 pt-4">
             <button
+              type="button"
+              onClick={handlePendingConsultation}
+              className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-sm transition-all"
+            >
+              Save as Pending (Consult Next)
+            </button>
+            <button
               type="submit"
               className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-lg shadow-blue-500/30 transition-all"
             >
-              <CheckCircle2 className="w-5 h-5" /> Save Complete Consultation & Notify Staff
+              <CheckCircle2 className="w-5 h-5" /> Final Submit Consultation
             </button>
           </div>
         </form>

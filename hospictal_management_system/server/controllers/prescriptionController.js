@@ -86,7 +86,7 @@ export const getPrescriptions = async (req, res) => {
 export const dispensePrescription = async (req, res) => {
   try {
     const { id } = req.params;
-    const { paymentMethod, discount = 0 } = req.body;
+    const { paymentMethod, discount = 0, dispensedItems } = req.body;
 
     const prescription = await Prescription.findById(id).populate("patient doctor medicines.medicine");
     if (!prescription) return res.status(404).json({ message: "Prescription not found." });
@@ -100,7 +100,17 @@ export const dispensePrescription = async (req, res) => {
     const saleMedicines = [];
 
     for (const item of prescription.medicines) {
-      const qty = item.quantity || 1;
+      let qty = item.quantity || 1;
+      
+      if (dispensedItems && Array.isArray(dispensedItems)) {
+        const customItem = dispensedItems.find(d => d._id === item._id.toString());
+        if (customItem !== undefined) {
+          qty = Number(customItem.quantity);
+        }
+      }
+
+      if (qty <= 0) continue; // Skip items marked as unavailable or 0 quantity
+
       let price = 0;
 
       if (item.medicine && item.medicine._id) {

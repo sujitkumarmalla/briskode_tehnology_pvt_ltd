@@ -55,6 +55,7 @@ import CheckInPage from "./pages/receptionist/CheckInPage";
 import CheckOutPage from "./pages/receptionist/CheckOutPage";
 import DoctorSchedulePage from "./pages/receptionist/DoctorSchedulePage";
 import BedAllocationPage from "./pages/receptionist/BedAllocationPage";
+import WardAllocationPage from "./pages/receptionist/WardAllocationPage";
 import ReceptionBillingPage from "./pages/receptionist/ReceptionBillingPage";
 
 // Pharmacy Pages
@@ -154,6 +155,7 @@ export default function App() {
               <Route path="check-out" element={<CheckOutPage />} />
               <Route path="doctors" element={<DoctorSchedulePage />} />
               <Route path="beds" element={<BedAllocationPage />} />
+              <Route path="wards" element={<WardAllocationPage />} />
               <Route path="billing" element={<ReceptionBillingPage />} />
               <Route path="profile" element={<DoctorProfile />} />
             </Route>

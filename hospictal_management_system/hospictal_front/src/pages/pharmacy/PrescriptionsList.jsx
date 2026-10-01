@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 export default function PrescriptionsList() {
   const [prescriptions, setPrescriptions] = useState([]);
   const [selectedRx, setSelectedRx] = useState(null);
+  const [dispenseQuantities, setDispenseQuantities] = useState({});
   const [discount, setDiscount] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("Cash");
   const [loading, setLoading] = useState(true);
@@ -36,9 +37,15 @@ export default function PrescriptionsList() {
     e.preventDefault();
     if (!selectedRx) return;
     try {
+      const dispensedItems = Object.keys(dispenseQuantities).map(id => ({
+        _id: id,
+        quantity: dispenseQuantities[id]
+      }));
+
       const res = await API.put(`/prescriptions/${selectedRx._id}/dispense`, {
         discount: Number(discount),
-        paymentMethod
+        paymentMethod,
+        dispensedItems
       });
       if (res.data.success) {
         toast.success(`Prescription Dispensed! Sales Invoice: ${res.data.sale.saleId}`);
@@ -62,7 +69,14 @@ export default function PrescriptionsList() {
       cell: (row) => (
         row.status !== "Dispensed" ? (
           <button
-            onClick={() => setSelectedRx(row)}
+            onClick={() => {
+              setSelectedRx(row);
+              const initialQuantities = {};
+              row.medicines?.forEach(m => {
+                initialQuantities[m._id] = m.quantity;
+              });
+              setDispenseQuantities(initialQuantities);
+            }}
             className="flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-3.5 py-1.5 rounded-lg shadow-sm"
           >
             <Pill className="w-4 h-4" /> Verify & Dispense
@@ -118,8 +132,33 @@ export default function PrescriptionsList() {
                     <div>
                       <p className="font-bold text-slate-900">{m.medicineName} ({m.dosage})</p>
                       <p className="text-[10px] text-slate-500">Freq: {m.frequency} | Duration: {m.duration} | Instructions: {m.instructions}</p>
+                      <p className="text-[10px] text-indigo-600 font-semibold mt-0.5">Prescribed Qty: {m.quantity}</p>
                     </div>
-                    <span className="font-bold font-mono text-slate-900 bg-slate-100 px-2 py-1 rounded">Qty: {m.quantity}</span>
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase">Dispense:</label>
+                        <input
+                          type="number"
+                          min="0"
+                          max={m.quantity}
+                          value={dispenseQuantities[m._id] ?? m.quantity}
+                          onChange={(e) => setDispenseQuantities({ ...dispenseQuantities, [m._id]: Number(e.target.value) })}
+                          disabled={dispenseQuantities[m._id] === 0}
+                          className="w-16 p-1 border border-slate-300 rounded text-center text-sm font-bold focus:ring-2 focus:ring-indigo-500 disabled:bg-slate-100 disabled:text-slate-400"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setDispenseQuantities({ ...dispenseQuantities, [m._id]: dispenseQuantities[m._id] === 0 ? m.quantity : 0 })}
+                        className={`text-[10px] uppercase tracking-wider px-2 py-1.5 rounded font-bold border transition-colors ${
+                          dispenseQuantities[m._id] === 0 
+                            ? "bg-red-50 text-red-700 border-red-200 hover:bg-red-100" 
+                            : "bg-slate-50 text-slate-500 border-slate-200 hover:bg-red-50 hover:text-red-600 hover:border-red-200"
+                        }`}
+                      >
+                        {dispenseQuantities[m._id] === 0 ? "Unavailable" : "Mark Unavailable"}
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>

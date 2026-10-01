@@ -110,7 +110,8 @@ export default function Sidebar({ isOpen, setIsOpen }) {
           { name: "Check-In Desk", path: "/receptionist/check-in", icon: Clock },
           { name: "Check-Out Desk", path: "/receptionist/check-out", icon: Receipt },
           { name: "Doctor Schedule", path: "/receptionist/doctors", icon: Stethoscope },
-          { name: "Beds Allocation", path: "/receptionist/beds", icon: BedDouble }
+          { name: "Beds Allocation", path: "/receptionist/beds", icon: BedDouble },
+          { name: "Ward Allocation", path: "/receptionist/wards", icon: BedDouble }
         ]
       },
       {

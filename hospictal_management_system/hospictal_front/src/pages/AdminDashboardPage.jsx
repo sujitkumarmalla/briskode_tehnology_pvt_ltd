@@ -20,6 +20,7 @@ import {
 } from "../services/api";
 
 import { toast } from "react-toastify";
+import WardManagement from "./admin/WardManagement";
 
 function AdminDashboardPage() {
   const { user, logout, updateUserProfile } = useAuth();
@@ -511,6 +512,7 @@ function AdminDashboardPage() {
               { id: "appointments", label: "Appointments", badge: stats.total, icon: "📅" },
               { id: "doctors", label: "Doctors Directory", badge: doctors.length, icon: "🩺" },
               { id: "patients", label: "Patient Records", badge: stats.totalPatients, icon: "👤" },
+              { id: "wards", label: "Ward Management", icon: "🛏️" },
               { id: "packages", label: "Health Packages", badge: packages.length, icon: "📦" },
               { id: "analytics", label: "Analytics & Tools", icon: "📈" }
             ].map((tab) => (
@@ -1323,7 +1325,12 @@ function AdminDashboardPage() {
           </div>
         )}
 
-        {/* ================= TAB 5: HEALTH PACKAGES ================= */}
+        {/* ================= TAB: WARDS ================= */}
+        {activeTab === "wards" && (
+          <WardManagement />
+        )}
+
+        {/* ================= TAB 5: PACKAGES ================= */}
         {activeTab === "packages" && (
           <div className="space-y-6 animate-fade-in">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm">
