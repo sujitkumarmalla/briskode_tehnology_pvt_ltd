@@ -87,7 +87,7 @@ const ServicePayments = () => {
       <div className="space-y-6 max-w-3xl mx-auto">
         {/* Residential */}
         <div className="border border-gray-200 rounded-xl p-4 md:p-6">
-          <h3 className="font-bold text-lg text-slate-800 mb-4 flex items-center gap-2">
+          <h3 className="font-bold text-lg text-[#27313B] mb-4 flex items-center gap-2">
             <span className="text-blue-600">🏢</span> Residential
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -105,7 +105,7 @@ const ServicePayments = () => {
 
         {/* Commercial */}
         <div className="border border-gray-200 rounded-xl p-4 md:p-6">
-          <h3 className="font-bold text-lg text-slate-800 mb-4 flex items-center gap-2">
+          <h3 className="font-bold text-lg text-[#27313B] mb-4 flex items-center gap-2">
             <span className="text-blue-600">🏬</span> Commercial Establishment
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -199,8 +199,8 @@ const ServicePayments = () => {
                   formData.duration === plan.duration ? 'border-blue-600 bg-blue-50/50 shadow-md' : 'border-gray-200 hover:border-blue-300'
                 }`}
               >
-                {plan.off && <div className="absolute top-4 right-4 bg-[#10b981] text-white text-[11px] font-bold px-2.5 py-1 rounded-full tracking-wide">{plan.off}</div>}
-                <h3 className="font-bold text-slate-800 text-lg mb-2">{plan.duration}</h3>
+                {plan.off && <div className="absolute top-4 right-4 bg-gradient-to-br from-[#E47715] to-[#F2A65A] text-white shadow-[0_5px_15px_rgba(228,119,21,0.18)] text-[11px] font-bold px-2.5 py-1 rounded-full tracking-wide">{plan.off}</div>}
+                <h3 className="font-bold text-[#27313B] text-lg mb-2">{plan.duration}</h3>
                 <p className="text-3xl md:text-4xl font-bold text-blue-600 mb-1">Rs. {plan.amount.toLocaleString()}</p>
                 {plan.sub && <p className="text-sm text-gray-500">{plan.sub}</p>}
               </div>
@@ -226,32 +226,32 @@ const ServicePayments = () => {
         {/* Left Side Details */}
         <div className="lg:col-span-7 space-y-6">
           <div className="border border-gray-200 rounded-xl p-6 md:p-8">
-            <h3 className="font-bold text-lg text-slate-800 mb-6 border-b pb-3">Property Details</h3>
+            <h3 className="font-bold text-lg text-[#27313B] mb-6 border-b pb-3">Property Details</h3>
             <div className="grid grid-cols-[1fr_2fr] gap-y-4 text-[15px]">
               <div className="text-gray-500">Applicant:</div>
-              <div className="font-medium text-slate-800">{formData.applicant || '-'}</div>
+              <div className="font-medium text-[#27313B]">{formData.applicant || '-'}</div>
               <div className="text-gray-500">Mobile:</div>
-              <div className="font-medium text-slate-800">{formData.mobile || '-'}</div>
+              <div className="font-medium text-[#27313B]">{formData.mobile || '-'}</div>
               <div className="text-gray-500">Ward Number:</div>
-              <div className="font-medium text-slate-800">{formData.ward || '-'}</div>
+              <div className="font-medium text-[#27313B]">{formData.ward || '-'}</div>
               <div className="text-gray-500">House/Plot Number:</div>
-              <div className="font-medium text-slate-800">{formData.houseNo || '-'}</div>
+              <div className="font-medium text-[#27313B]">{formData.houseNo || '-'}</div>
               <div className="text-gray-500">Address:</div>
-              <div className="font-medium text-slate-800">{formData.address || '-'}</div>
+              <div className="font-medium text-[#27313B]">{formData.address || '-'}</div>
               <div className="text-gray-500">Pincode:</div>
-              <div className="font-medium text-slate-800">{formData.pincode || '-'}</div>
+              <div className="font-medium text-[#27313B]">{formData.pincode || '-'}</div>
             </div>
 
-            <h3 className="font-bold text-lg text-slate-800 mt-8 mb-6 border-b pb-3">Service Details</h3>
+            <h3 className="font-bold text-lg text-[#27313B] mt-8 mb-6 border-b pb-3">Service Details</h3>
             <div className="grid grid-cols-[1fr_2fr] gap-y-4 text-[15px]">
               <div className="text-gray-500">Category:</div>
-              <div className="font-medium text-slate-800">{formData.category}</div>
+              <div className="font-medium text-[#27313B]">{formData.category}</div>
               <div className="text-gray-500">Service Type:</div>
-              <div className="font-medium text-slate-800">{formData.serviceType}</div>
+              <div className="font-medium text-[#27313B]">{formData.serviceType}</div>
               <div className="text-gray-500">Duration:</div>
-              <div className="font-medium text-slate-800">{formData.duration}</div>
+              <div className="font-medium text-[#27313B]">{formData.duration}</div>
               <div className="text-gray-500">Start Date:</div>
-              <div className="font-medium text-slate-800">{new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' })}</div>
+              <div className="font-medium text-[#27313B]">{new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' })}</div>
             </div>
           </div>
         </div>
@@ -273,7 +273,7 @@ const ServicePayments = () => {
           </div>
 
           <div className="border border-gray-200 rounded-xl p-6 md:p-8 bg-white shadow-sm">
-            <h3 className="font-bold text-lg text-slate-800 mb-6">Submit Payment Proof</h3>
+            <h3 className="font-bold text-lg text-[#27313B] mb-6">Submit Payment Proof</h3>
             <div className="space-y-5">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Payment Method</label>
@@ -313,7 +313,7 @@ const ServicePayments = () => {
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-slate-800 truncate">{paymentProof.file.name}</p>
+                      <p className="text-sm font-medium text-[#27313B] truncate">{paymentProof.file.name}</p>
                       <p className="text-xs text-slate-500">{(paymentProof.file.size / 1024 / 1024).toFixed(2)} MB</p>
                     </div>
                     <button 
@@ -349,8 +349,8 @@ const ServicePayments = () => {
 
   const renderStep5 = () => (
     <div className="animate-in fade-in zoom-in-95 duration-500 py-10 flex flex-col items-center justify-center text-center">
-      <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-6 shadow-sm">
-        <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center text-white shadow-md">
+      <div className="w-24 h-24 bg-[#FFF3E0] rounded-full flex items-center justify-center mb-6 shadow-sm">
+        <div className="w-16 h-16 bg-[#F2A65A] rounded-full flex items-center justify-center text-white shadow-md">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
@@ -388,3 +388,10 @@ const ServicePayments = () => {
 };
 
 export default ServicePayments;
+
+
+
+
+
+
+

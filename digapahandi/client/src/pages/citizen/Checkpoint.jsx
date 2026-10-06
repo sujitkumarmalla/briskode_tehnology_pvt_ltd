@@ -39,11 +39,11 @@ const createCustomIcon = (color, emoji) => {
 
 const categories = [
   { id: 'toilet', label: 'Toilet', icon: '🚾', color: '#3b82f6', defaultChecked: true },
-  { id: 'park', label: 'Park', icon: '🌳', color: '#10b981', defaultChecked: true },
+  { id: 'park', label: 'Park', icon: '🌳', color: '#E47715', defaultChecked: true },
   { id: 'hospital', label: 'Hospital', icon: '🏥', color: '#ef4444', defaultChecked: true },
   { id: 'temple', label: 'Temple', icon: '🛕', color: '#f59e0b', defaultChecked: true },
-  { id: 'school', label: 'School', icon: '🏫', color: '#8b5cf6', defaultChecked: true },
-  { id: 'police', label: 'Police', icon: '👮', color: '#0ea5e9', defaultChecked: true },
+  { id: 'school', label: 'School', icon: '🏫', color: '#E47715', defaultChecked: true },
+  { id: 'police', label: 'Police', icon: '👮', color: '#6CBCC7', defaultChecked: true },
   { id: 'streetlight', label: 'Streetlight', icon: '💡', color: '#eab308', defaultChecked: true },
   { id: 'tourist', label: 'Tourist', icon: '📸', color: '#6366f1', defaultChecked: true },
 ];
@@ -66,7 +66,7 @@ const Checkpoint = () => {
   return (
     <div className="max-w-7xl mx-auto">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-[#0a8459] mb-1">Digapahandi Checkpoints Map</h1>
+        <h1 className="text-3xl font-bold text-[#E47715] mb-1">Digapahandi Checkpoints Map</h1>
         <p className="text-gray-500">Track public facilities and infrastructure in Digapahandi</p>
       </div>
 
@@ -75,10 +75,10 @@ const Checkpoint = () => {
           <input 
             type="text" 
             placeholder="Search checkpoint..." 
-            className="w-full pl-4 pr-10 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0a8459] focus:border-transparent"
+            className="w-full pl-4 pr-10 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#F2A65A] focus:border-transparent"
           />
         </div>
-        <button className="w-full md:w-auto bg-[#0a8459] hover:bg-[#086a47] text-white px-6 py-2.5 rounded-xl font-medium transition-colors whitespace-nowrap">
+        <button className="w-full md:w-auto bg-gradient-to-br from-[#E47715] to-[#F2A65A] text-white hover:opacity-90 active:opacity-100 px-6 py-2.5 rounded-xl font-medium transition-colors whitespace-nowrap">
           Locate Me
         </button>
       </div>
@@ -116,7 +116,7 @@ const Checkpoint = () => {
                 icon={createCustomIcon(catInfo.color, catInfo.icon)}
               >
                 <Popup>
-                  <div className="font-bold text-slate-800">{loc.name}</div>
+                  <div className="font-bold text-[#27313B]">{loc.name}</div>
                   <div className="text-xs text-slate-500 capitalize">{loc.category}</div>
                 </Popup>
               </Marker>
@@ -129,3 +129,10 @@ const Checkpoint = () => {
 };
 
 export default Checkpoint;
+
+
+
+
+
+
+

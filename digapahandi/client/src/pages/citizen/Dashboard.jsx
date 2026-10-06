@@ -25,7 +25,7 @@ const Dashboard = () => {
 
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-[#0a8459] mb-1">Citizen Dashboard</h1>
+        <h1 className="text-3xl font-bold text-[#E47715] mb-1">Citizen Dashboard</h1>
         <p className="text-gray-500">Track waste collection and manage complaints efficiently.</p>
       </div>
 
@@ -72,12 +72,12 @@ const Dashboard = () => {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Total */}
-        <div className="bg-[#10b981] rounded-xl p-5 text-white shadow-sm relative overflow-hidden flex flex-col justify-between min-h-[140px]">
+        <div className="bg-white/70 backdrop-blur-lg rounded-xl p-5 text-[#27313B] shadow-[0_8px_30px_rgba(80,50,20,0.06)] border border-white/80 shadow-sm relative overflow-hidden flex flex-col justify-between min-h-[140px]">
           <div>
             <h3 className="text-xs font-semibold tracking-wider opacity-90 uppercase mb-1">Total Complaints</h3>
             <p className="text-4xl font-bold">0</p>
           </div>
-          <div className="absolute top-4 right-4 bg-white/20 p-2 rounded-lg">
+          <div className="absolute top-4 right-4 bg-[#F28C28]/10 text-[#E47715] p-2 rounded-lg">
             <FileText size={20} />
           </div>
           <button className="bg-white/20 hover:bg-white/30 transition-colors w-fit px-3 py-1 text-xs font-medium rounded-md mt-4">
@@ -86,12 +86,12 @@ const Dashboard = () => {
         </div>
 
         {/* Resolved */}
-        <div className="bg-[#0ea5e9] rounded-xl p-5 text-white shadow-sm relative overflow-hidden flex flex-col justify-between min-h-[140px]">
+        <div className="bg-white/70 backdrop-blur-lg rounded-xl p-5 text-[#27313B] shadow-[0_8px_30px_rgba(80,50,20,0.06)] border border-white/80 shadow-sm relative overflow-hidden flex flex-col justify-between min-h-[140px]">
           <div>
             <h3 className="text-xs font-semibold tracking-wider opacity-90 uppercase mb-1">Resolved Complaints</h3>
             <p className="text-4xl font-bold">0</p>
           </div>
-          <div className="absolute top-4 right-4 bg-white/20 p-2 rounded-lg">
+          <div className="absolute top-4 right-4 bg-[#F28C28]/10 text-[#E47715] p-2 rounded-lg">
             <CheckCircle size={20} />
           </div>
           <button className="bg-white/20 hover:bg-white/30 transition-colors w-fit px-3 py-1 text-xs font-medium rounded-md mt-4">
@@ -100,12 +100,12 @@ const Dashboard = () => {
         </div>
 
         {/* Pending */}
-        <div className="bg-[#f97316] rounded-xl p-5 text-white shadow-sm relative overflow-hidden flex flex-col justify-between min-h-[140px]">
+        <div className="bg-white/70 backdrop-blur-lg rounded-xl p-5 text-[#27313B] shadow-[0_8px_30px_rgba(80,50,20,0.06)] border border-white/80 shadow-sm relative overflow-hidden flex flex-col justify-between min-h-[140px]">
           <div>
             <h3 className="text-xs font-semibold tracking-wider opacity-90 uppercase mb-1">Pending Complaints</h3>
             <p className="text-4xl font-bold">0</p>
           </div>
-          <div className="absolute top-4 right-4 bg-white/20 p-2 rounded-lg">
+          <div className="absolute top-4 right-4 bg-[#F28C28]/10 text-[#E47715] p-2 rounded-lg">
             <Clock size={20} />
           </div>
           <button className="bg-white/20 hover:bg-white/30 transition-colors w-fit px-3 py-1 text-xs font-medium rounded-md mt-4">
@@ -118,12 +118,12 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-2">
         {/* Recent Activity */}
         <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3 className="text-lg font-bold text-slate-800 mb-6">Recent Activity</h3>
+          <h3 className="text-lg font-bold text-[#27313B] mb-6">Recent Activity</h3>
           
           <div className="space-y-4">
             <div className="bg-slate-50 rounded-xl p-4 flex justify-between items-start">
               <div>
-                <p className="font-medium text-slate-800">Total complaints: 0</p>
+                <p className="font-medium text-[#27313B]">Total complaints: 0</p>
                 <p className="text-sm text-slate-500 mt-1">Complaints registered in the system</p>
               </div>
               <span className="text-xs text-slate-400">Updated now</span>
@@ -131,7 +131,7 @@ const Dashboard = () => {
             
             <div className="bg-slate-50 rounded-xl p-4 flex justify-between items-start">
               <div>
-                <p className="font-medium text-slate-800">Resolved complaints: 0</p>
+                <p className="font-medium text-[#27313B]">Resolved complaints: 0</p>
                 <p className="text-sm text-slate-500 mt-1">Issues successfully closed</p>
               </div>
               <span className="text-xs text-slate-400">Updated now</span>
@@ -141,19 +141,19 @@ const Dashboard = () => {
 
         {/* Quick Actions */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3 className="text-lg font-bold text-slate-800 mb-6">Quick Actions</h3>
+          <h3 className="text-lg font-bold text-[#27313B] mb-6">Quick Actions</h3>
           
           <div className="space-y-3">
-            <Link to="/citizen/complaint" className="block w-full py-3.5 bg-[#10b981] hover:bg-[#059669] text-white text-center rounded-xl text-sm font-medium transition-colors shadow-sm">
+            <Link to="/citizen/complaint" className="block w-full py-3.5 bg-gradient-to-br from-[#E47715] to-[#F2A65A] text-white hover:opacity-90 text-center rounded-xl text-sm font-medium transition-colors shadow-sm">
               Post a Complaint
             </Link>
-            <Link to="/citizen/track" className="block w-full py-3.5 bg-[#0ea5e9] hover:bg-[#0284c7] text-white text-center rounded-xl text-sm font-medium transition-colors shadow-sm">
+            <Link to="/citizen/track" className="block w-full py-3.5 bg-gradient-to-br from-[#6CBCC7] to-[#A8DDE2] hover:opacity-90 text-white text-center rounded-xl text-sm font-medium transition-colors shadow-sm">
               Track Vehicle
             </Link>
-            <Link to="/citizen/payments" className="block w-full py-3.5 bg-[#f97316] hover:bg-[#ea580c] text-white text-center rounded-xl text-sm font-medium transition-colors shadow-sm">
+            <Link to="/citizen/payments" className="block w-full py-3.5 bg-gradient-to-br from-[#E47715] to-[#F2A65A] text-white hover:opacity-90 active:opacity-100 text-center rounded-xl text-sm font-medium transition-colors shadow-sm">
               Service Booking & Payment
             </Link>
-            <button className="block w-full py-3.5 bg-[#a855f7] hover:bg-[#9333ea] text-white text-center rounded-xl text-sm font-medium transition-colors shadow-sm">
+            <button className="block w-full py-3.5 bg-[#a855f7] hover:opacity-90 active:opacity-100 text-white text-center rounded-xl text-sm font-medium transition-colors shadow-sm">
               My Complaints
             </button>
           </div>
@@ -164,3 +164,10 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+
+
+
+
+
+

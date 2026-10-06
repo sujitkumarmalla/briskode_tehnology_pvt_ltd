@@ -21,11 +21,11 @@ const Complaints = () => {
       {/* Header Card */}
       <div className="bg-white rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-sm border border-gray-100">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-1">Citizen Complaint Management</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#27313B] mb-1">Citizen Complaint Management</h1>
           <p className="text-slate-500">Supervisor resolution & monitoring (ICT Compliant)</p>
         </div>
         <div className="flex gap-3">
-          <span className="px-4 py-1.5 rounded-full text-emerald-600 bg-emerald-50 border border-emerald-100 text-sm font-medium">
+          <span className="px-4 py-1.5 rounded-full text-[#E47715] bg-[#FFF8F2] border border-emerald-100 text-sm font-medium">
             Live Monitoring
           </span>
           <span className="px-4 py-1.5 rounded-full text-blue-600 bg-blue-50 border border-blue-100 text-sm font-medium">
@@ -42,7 +42,7 @@ const Complaints = () => {
             onClick={() => setFilter(f)}
             className={`px-6 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
               filter === f 
-                ? 'bg-[#0a8459] text-white shadow-md shadow-emerald-900/10' 
+                ? 'bg-gradient-to-br from-[#E47715] to-[#F2A65A] text-white shadow-[0_5px_15px_rgba(228,119,21,0.18)] shadow-md shadow-emerald-900/10' 
                 : 'bg-white border border-gray-200 text-slate-600 hover:bg-slate-50'
             }`}
           >
@@ -52,11 +52,11 @@ const Complaints = () => {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-white/70 backdrop-blur-lg rounded-2xl shadow-[0_8px_30px_rgba(80,50,20,0.06)] border border-white/80 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse min-w-[800px]">
             <thead>
-              <tr className="bg-[#0a8459] text-white">
+              <tr className="bg-[#FFF7EF] text-[#8A4D18]">
                 <th className="p-4 text-xs font-bold tracking-wider">ID</th>
                 <th className="p-4 text-xs font-bold tracking-wider">PHOTO</th>
                 <th className="p-4 text-xs font-bold tracking-wider">WARD</th>
@@ -70,13 +70,13 @@ const Complaints = () => {
             </thead>
             <tbody>
               {filteredComplaints.map((c, i) => (
-                <tr key={c.id} className={`border-b border-gray-100 hover:bg-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-slate-50/30'}`}>
+                <tr key={c.id} className={`border-b border-[#F28C28]/15 hover:bg-[#FFF4E9] ${i % 2 === 0 ? 'bg-white' : 'bg-[#FFFBF7]'}`}>
                   <td className="p-4 text-sm font-medium text-slate-700">{c.id}</td>
                   <td className="p-4">
                     <img src={c.photo} alt="Issue" className="w-12 h-12 rounded-lg object-cover shadow-sm border border-gray-200" />
                   </td>
                   <td className="p-4 text-sm text-slate-600">{c.ward}</td>
-                  <td className="p-4 text-sm font-medium text-slate-800">{c.issue}</td>
+                  <td className="p-4 text-sm font-medium text-[#27313B]">{c.issue}</td>
                   <td className="p-4">
                     <span className="px-2.5 py-1 rounded bg-amber-50 text-amber-600 font-semibold text-xs border border-amber-100">
                       {c.priority}
@@ -85,20 +85,20 @@ const Complaints = () => {
                   <td className="p-4 text-sm text-slate-500 whitespace-nowrap">{c.vehicle}</td>
                   <td className="p-4">
                     <span className={`px-2.5 py-1 rounded font-semibold text-xs border ${
-                      c.status === 'Resolved' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-red-50 text-red-600 border-red-100'
+                      c.status === 'Resolved' ? 'bg-[#FFF8F2] text-[#E47715] border-emerald-100' : 'bg-red-50 text-red-600 border-red-100'
                     }`}>
                       {c.status}
                     </span>
                   </td>
                   <td className="p-4">
-                    <span className="flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded w-fit border border-emerald-100">
-                      <span className="w-3 h-3 bg-emerald-500 text-white rounded-sm flex items-center justify-center text-[8px]">✓</span> {c.sla}
+                    <span className="flex items-center gap-1 text-xs font-bold text-[#E47715] bg-[#FFF8F2] px-2 py-1 rounded w-fit border border-emerald-100">
+                      <span className="w-3 h-3 bg-gradient-to-br from-[#E47715] to-[#F2A65A] text-white shadow-[0_5px_15px_rgba(228,119,21,0.18)] rounded-sm flex items-center justify-center text-[8px]">✓</span> {c.sla}
                     </span>
                   </td>
                   <td className="p-4 text-center">
                     <button 
                       onClick={() => setSelectedRoute(c)}
-                      className="bg-emerald-50 hover:bg-emerald-100 text-[#0a8459] px-4 py-1.5 rounded-lg text-xs font-bold transition-colors border border-emerald-100"
+                      className="bg-[#FFF8F2] hover:bg-[#FFF4E9] text-[#E47715] px-4 py-1.5 rounded-lg text-xs font-bold transition-colors border border-emerald-100"
                     >
                       View<br/>Route
                     </button>
@@ -120,8 +120,8 @@ const Complaints = () => {
             {/* Modal Header */}
             <div className="flex justify-between items-center p-5 border-b border-gray-100 bg-slate-50">
               <div>
-                <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
-                  <MapPin className="text-[#0a8459]" /> Route & Location Tracking
+                <h2 className="text-xl font-bold text-[#27313B] flex items-center gap-2">
+                  <MapPin className="text-[#E47715]" /> Route & Location Tracking
                 </h2>
                 <p className="text-sm text-slate-500 mt-1">Complaint {selectedRoute.id} - {selectedRoute.issue}</p>
               </div>
@@ -150,7 +150,7 @@ const Complaints = () => {
                   <ul className="space-y-3 text-sm">
                     <li className="flex justify-between border-b border-gray-200 pb-2">
                       <span className="text-slate-500">Status:</span>
-                      <span className={`font-bold ${selectedRoute.status === 'Resolved' ? 'text-emerald-600' : 'text-red-600'}`}>{selectedRoute.status}</span>
+                      <span className={`font-bold ${selectedRoute.status === 'Resolved' ? 'text-[#E47715]' : 'text-red-600'}`}>{selectedRoute.status}</span>
                     </li>
                     <li className="flex justify-between border-b border-gray-200 pb-2">
                       <span className="text-slate-500">Priority:</span>
@@ -158,7 +158,7 @@ const Complaints = () => {
                     </li>
                     <li className="flex justify-between pb-1">
                       <span className="text-slate-500">Assigned Vehicle:</span>
-                      <span className="font-bold text-slate-800">{selectedRoute.vehicle}</span>
+                      <span className="font-bold text-[#27313B]">{selectedRoute.vehicle}</span>
                     </li>
                   </ul>
                 </div>
@@ -176,9 +176,9 @@ const Complaints = () => {
                     referrerPolicy="no-referrer-when-downgrade"
                   ></iframe>
                   {/* Fake vehicle marker overlay to simulate tracking */}
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-3 py-1.5 rounded-full shadow-lg border-2 border-[#0a8459] flex items-center gap-2 animate-bounce">
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-3 py-1.5 rounded-full shadow-lg border-2 border-[#F2A65A] flex items-center gap-2 animate-bounce">
                     <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
-                    <span className="text-xs font-bold text-slate-800">Issue Location</span>
+                    <span className="text-xs font-bold text-[#27313B]">Issue Location</span>
                   </div>
                 </div>
               </div>
@@ -191,3 +191,10 @@ const Complaints = () => {
 };
 
 export default Complaints;
+
+
+
+
+
+
+

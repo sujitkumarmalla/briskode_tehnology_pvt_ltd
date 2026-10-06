@@ -151,7 +151,7 @@ const WealthCenter = () => {
     <div className="max-w-7xl mx-auto space-y-6 p-6 pb-10">
       {activeTab === 'MoKhata' ? (
         <div className="flex flex-col rounded-2xl shadow-sm border border-gray-100 overflow-hidden bg-gradient-to-br from-[#c1f5d6] to-[#e6fcf0]">
-          <div className="bg-[#f97316] p-4 flex justify-between items-center text-white shadow-sm">
+          <div className="bg-[#FFF7EF] p-4 flex justify-between items-center text-[#8A4D18] border-b border-[#F28C28]/25 shadow-sm">
              <div className="flex items-center gap-3">
                <button onClick={() => setActiveTab('MCC')} className="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors">
                  <ArrowLeft size={20} />
@@ -166,7 +166,7 @@ const WealthCenter = () => {
 
           <div className="p-6 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-[#4f46e5] rounded-2xl p-6 text-white shadow-md flex flex-col justify-between">
+              <div className="bg-white/70 backdrop-blur-lg rounded-2xl p-6 text-[#27313B] shadow-[0_8px_30px_rgba(80,50,20,0.06)] border border-white/80 flex flex-col justify-between">
                 <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-4">
                   <Box size={24} />
                 </div>
@@ -175,7 +175,7 @@ const WealthCenter = () => {
                 <p className="text-sm opacity-80">Khata</p>
               </div>
 
-              <div className="bg-[#10b981] rounded-2xl p-6 text-white shadow-md flex flex-col justify-between">
+              <div className="bg-white/70 backdrop-blur-lg rounded-2xl p-6 text-[#27313B] shadow-[0_8px_30px_rgba(80,50,20,0.06)] border border-white/80 flex flex-col justify-between">
                 <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-4">
                   <Plus size={24} />
                 </div>
@@ -184,7 +184,7 @@ const WealthCenter = () => {
                 <p className="text-sm opacity-80">Added</p>
               </div>
 
-              <div className="bg-[#f2310f] rounded-2xl p-6 text-white shadow-md flex flex-col justify-between">
+              <div className="bg-white/70 backdrop-blur-lg rounded-2xl p-6 text-[#27313B] shadow-[0_8px_30px_rgba(80,50,20,0.06)] border border-white/80 flex flex-col justify-between">
                 <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-4">
                   <ShoppingCart size={24} />
                 </div>
@@ -194,7 +194,7 @@ const WealthCenter = () => {
               </div>
             </div>
 
-            <div className="bg-[#9333ea] rounded-2xl p-6 text-white shadow-md">
+            <div className="bg-white/70 backdrop-blur-lg rounded-2xl p-6 text-[#27313B] shadow-[0_8px_30px_rgba(80,50,20,0.06)] border border-white/80">
               <div className="flex items-center gap-2 mb-6">
                 <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
                   <TrendingUp size={20} />
@@ -220,56 +220,56 @@ const WealthCenter = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-[#10b981] rounded-xl flex items-center justify-center text-white">
+                  <div className="w-10 h-10 bg-[#F28C28]/10 text-[#E47715] rounded-xl flex items-center justify-center">
                     <Plus size={20} />
                   </div>
-                  <h3 className="text-xl font-bold text-slate-800">Add Khata</h3>
+                  <h3 className="text-xl font-bold text-[#27313B]">Add Khata</h3>
                 </div>
                 <input 
                   type="number"
                   placeholder="Enter quantity"
                   value={addQuantity}
                   onChange={e => setAddQuantity(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 mb-4 focus:outline-none focus:ring-2 focus:ring-[#10b981]"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 mb-4 focus:outline-none focus:ring-2 focus:ring-[#F2A65A]"
                 />
-                <button onClick={handleAddKhata} className="w-full bg-[#10b981] text-white py-3 rounded-xl font-bold shadow-sm hover:bg-emerald-600 transition-colors">
+                <button onClick={handleAddKhata} className="w-full bg-gradient-to-br from-[#E47715] to-[#F2A65A] text-white shadow-[0_5px_15px_rgba(228,119,21,0.18)] py-3 rounded-xl font-bold shadow-sm hover:opacity-90 active:opacity-100 transition-colors">
                   Add to Stock
                 </button>
               </div>
 
               <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-[#f97316] rounded-xl flex items-center justify-center text-white">
+                  <div className="w-10 h-10 bg-[#F28C28]/10 text-[#E47715] rounded-xl flex items-center justify-center">
                     <Minus size={20} />
                   </div>
-                  <h3 className="text-xl font-bold text-slate-800">Sold Khata</h3>
+                  <h3 className="text-xl font-bold text-[#27313B]">Sold Khata</h3>
                 </div>
                 <input 
                   type="number"
                   placeholder="Enter quantity"
                   value={soldQuantity}
                   onChange={e => setSoldQuantity(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 mb-4 focus:outline-none focus:ring-2 focus:ring-[#f97316]"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 mb-4 focus:outline-none focus:ring-2 focus:ring-[#F2A65A]"
                 />
-                <button onClick={handleSoldKhata} className="w-full bg-[#f2310f] text-white py-3 rounded-xl font-bold shadow-sm hover:bg-red-700 transition-colors">
+                <button onClick={handleSoldKhata} className="w-full bg-gradient-to-br from-[#E47715] to-[#F2A65A] text-white shadow-[0_5px_15px_rgba(228,119,21,0.18)] py-3 rounded-xl font-bold shadow-sm hover:bg-red-700 transition-colors">
                   Mark as Sold
                 </button>
               </div>
             </div>
 
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-              <h3 className="text-lg font-bold text-slate-800 mb-4">Transactions History</h3>
+              <h3 className="text-lg font-bold text-[#27313B] mb-4">Transactions History</h3>
               <div className="space-y-3">
                 {khataTransactions.map(tx => (
                   <div key={tx.id} className="border border-gray-200 rounded-xl p-4 flex justify-between items-center">
                     <div>
-                      <div className="flex items-center gap-2 font-bold text-slate-800">
-                        {tx.type === 'MAKE' ? <Plus size={16} className="text-[#8b5cf6]" /> : <Minus size={16} className="text-[#8b5cf6]" />}
+                      <div className="flex items-center gap-2 font-bold text-[#27313B]">
+                        {tx.type === 'MAKE' ? <Plus size={16} className="text-[#E47715]" /> : <Minus size={16} className="text-[#E47715]" />}
                         {tx.type === 'MAKE' ? 'Made' : 'Sold'} : {tx.qty}
                       </div>
                       <p className="text-xs text-gray-500 mt-1">{tx.date}</p>
                     </div>
-                    <span className={`px-3 py-1 rounded-full text-xs font-bold ${tx.type === 'MAKE' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'}`}>
+                    <span className={`px-3 py-1 rounded-full text-xs font-bold ${tx.type === 'MAKE' ? 'bg-[#FFF3E0] text-green-700' : 'bg-red-100 text-red-600'}`}>
                       {tx.type}
                     </span>
                   </div>
@@ -284,7 +284,7 @@ const WealthCenter = () => {
       ) : (
         <>
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-amber-600 to-emerald-700 rounded-2xl p-6 text-white shadow-md flex items-center gap-4">
+      <div className="bg-white/70 backdrop-blur-lg rounded-2xl p-6 text-[#27313B] shadow-[0_8px_30px_rgba(80,50,20,0.06)] border border-white/80 shadow-md flex items-center gap-4">
         <div className="bg-white/20 p-3 rounded-xl backdrop-blur-sm">
           <div className="w-8 h-8 border-[3px] border-white rounded-md flex items-center justify-center">
             <div className="w-3 h-3 border-[2px] border-white rounded-sm"></div>
@@ -300,7 +300,7 @@ const WealthCenter = () => {
         <div className="flex flex-wrap gap-3">
           {activeTab === 'MCC' ? (
             <>
-              <button onClick={() => setActiveTab('MCC')} className="bg-[#ea580c] text-white px-5 py-2.5 rounded-xl font-semibold flex items-center gap-2 shadow-sm">
+              <button onClick={() => setActiveTab('MCC')} className="bg-gradient-to-br from-[#E47715] to-[#F2A65A] text-white shadow-[0_5px_15px_rgba(228,119,21,0.18)] px-5 py-2.5 rounded-xl font-semibold flex items-center gap-2 shadow-sm">
                 <div className="w-4 h-4 border-2 border-white rounded-sm flex items-center justify-center"><div className="w-2 h-2 border-[1px] border-white rounded-[1px]"></div></div>
                 {t('supervisor.mccLong')}
               </button>
@@ -308,11 +308,11 @@ const WealthCenter = () => {
                 <div className="w-4 h-4 border-2 border-gray-400 rounded-sm flex items-center justify-center"><div className="w-2 h-2 border-[1px] border-gray-400 rounded-[1px]"></div></div>
                 {t('supervisor.mrfShort')}
               </button>
-              <button onClick={() => setActiveTab('MoKhata')} className="bg-[#4f46e5] text-white px-5 py-2.5 rounded-xl font-semibold flex items-center gap-2 shadow-sm">
+              <button onClick={() => setActiveTab('MoKhata')} className="bg-gradient-to-br from-[#E47715] to-[#F2A65A] text-white shadow-[0_5px_15px_rgba(228,119,21,0.18)] px-5 py-2.5 rounded-xl font-semibold flex items-center gap-2 shadow-sm">
                 <div className="w-4 h-4 border-2 border-white rounded-sm flex items-center justify-center"><div className="w-2 h-2 border-[1px] border-white rounded-[1px]"></div></div>
                 {t('supervisor.moKhata')}
               </button>
-              <button onClick={() => setIsAddRecordModalOpen(true)} className="bg-[#ea580c] text-white px-5 py-2.5 rounded-xl font-semibold flex items-center gap-2 shadow-sm">
+              <button onClick={() => setIsAddRecordModalOpen(true)} className="bg-gradient-to-br from-[#E47715] to-[#F2A65A] text-white shadow-[0_5px_15px_rgba(228,119,21,0.18)] px-5 py-2.5 rounded-xl font-semibold flex items-center gap-2 shadow-sm">
                 {t('supervisor.addRecord')}
               </button>
             </>
@@ -322,15 +322,15 @@ const WealthCenter = () => {
                 <div className="w-4 h-4 border-2 border-gray-400 rounded-sm flex items-center justify-center"><div className="w-2 h-2 border-[1px] border-gray-400 rounded-[1px]"></div></div>
                 {t('supervisor.mccShort')}
               </button>
-              <button onClick={() => setActiveTab('MRF')} className="bg-[#ea580c] text-white px-5 py-2.5 rounded-xl font-semibold flex items-center gap-2 shadow-sm">
+              <button onClick={() => setActiveTab('MRF')} className="bg-gradient-to-br from-[#E47715] to-[#F2A65A] text-white shadow-[0_5px_15px_rgba(228,119,21,0.18)] px-5 py-2.5 rounded-xl font-semibold flex items-center gap-2 shadow-sm">
                 <div className="w-4 h-4 border-2 border-white rounded-sm flex items-center justify-center"><div className="w-2 h-2 border-[1px] border-white rounded-[1px]"></div></div>
                 {t('supervisor.mrfLong')}
               </button>
-              <button onClick={() => setIsModalOpen(true)} className="bg-[#10b981] text-white px-5 py-2.5 rounded-xl font-semibold flex items-center gap-2 shadow-sm">
+              <button onClick={() => setIsModalOpen(true)} className="bg-gradient-to-br from-[#E47715] to-[#F2A65A] text-white shadow-[0_5px_15px_rgba(228,119,21,0.18)] px-5 py-2.5 rounded-xl font-semibold flex items-center gap-2 shadow-sm">
                 <div className="w-4 h-4 border-2 border-white rounded-sm flex items-center justify-center"><div className="w-2 h-2 border-[1px] border-white rounded-[1px]"></div></div>
                 {t('supervisor.agency')}
               </button>
-              <button onClick={() => setIsAddRecordModalOpen(true)} className="bg-[#ea580c] text-white px-5 py-2.5 rounded-xl font-semibold flex items-center gap-2 shadow-sm">
+              <button onClick={() => setIsAddRecordModalOpen(true)} className="bg-gradient-to-br from-[#E47715] to-[#F2A65A] text-white shadow-[0_5px_15px_rgba(228,119,21,0.18)] px-5 py-2.5 rounded-xl font-semibold flex items-center gap-2 shadow-sm">
                 {t('supervisor.addRecord')}
               </button>
             </>
@@ -348,7 +348,7 @@ const WealthCenter = () => {
           <input 
             type="text" 
             placeholder={t('supervisor.search')}
-            className="w-full pl-11 pr-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#10b981] shadow-sm bg-white"
+            className="w-full pl-11 pr-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#F2A65A] shadow-sm bg-white"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -358,7 +358,7 @@ const WealthCenter = () => {
           <select 
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full sm:w-48 pl-11 pr-8 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#10b981] shadow-sm bg-white appearance-none cursor-pointer"
+            className="w-full sm:w-48 pl-11 pr-8 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#F2A65A] shadow-sm bg-white appearance-none cursor-pointer"
           >
             <option value="All Status">{t('supervisor.allStatus')}</option>
             <option value="Stored">{t('supervisor.stored')}</option>
@@ -378,19 +378,19 @@ const WealthCenter = () => {
           ) : (
             cubeRecords.filter(r => r.type === 'MCC' && (statusFilter === 'All Status' || statusFilter === 'Stored') && 
             (r.id.toLowerCase().includes(searchTerm.toLowerCase()) || r.supervisorName.toLowerCase().includes(searchTerm.toLowerCase()) || r.cubeNumber.toLowerCase().includes(searchTerm.toLowerCase()))).map(record => (
-              <div key={record.id} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row gap-6">
+              <div key={record.id} className="bg-white/70 backdrop-blur-lg rounded-2xl shadow-[0_8px_30px_rgba(80,50,20,0.06)] border border-white/80 p-6 flex flex-col md:flex-row gap-6">
                 <div className="flex-1 space-y-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-4">
-                      <div className="bg-[#ea580c] p-3 rounded-xl text-white">
+                      <div className="bg-[#F28C28]/10 text-[#E47715] p-3 rounded-xl">
                         <div className="w-6 h-6 border-2 border-white rounded-sm flex items-center justify-center"><div className="w-2 h-2 border-[1px] border-white rounded-[1px]"></div></div>
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold text-slate-800">Micro Composting Center - {record.id.slice(-5)}</h3>
+                        <h3 className="text-xl font-bold text-[#27313B]">Micro Composting Center - {record.id.slice(-5)}</h3>
                         <p className="text-gray-500 text-sm">Cube #{record.cubeNumber}</p>
                       </div>
                     </div>
-                    <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
+                    <span className="bg-[#FFF3E0] text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
                       {t('supervisor.stored')}
                     </span>
                   </div>
@@ -400,14 +400,14 @@ const WealthCenter = () => {
                       <User className="text-blue-500" size={20} />
                       <div>
                         <p className="text-xs text-gray-500">{t('supervisor.supervisor')}</p>
-                        <p className="font-semibold text-slate-800">{record.supervisorName}</p>
+                        <p className="font-semibold text-[#27313B]">{record.supervisorName}</p>
                       </div>
                     </div>
                     <div className="bg-purple-50/50 p-4 rounded-xl border border-purple-100 flex items-center gap-3">
                       <Phone className="text-purple-500" size={20} />
                       <div>
                         <p className="text-xs text-gray-500">{t('supervisor.contact')}</p>
-                        <p className="font-semibold text-slate-800">{record.contactNumber}</p>
+                        <p className="font-semibold text-[#27313B]">{record.contactNumber}</p>
                       </div>
                     </div>
                   </div>
@@ -431,19 +431,19 @@ const WealthCenter = () => {
         <div className="space-y-4">
           {cubeRecords.filter(r => r.type === 'MRF' && (statusFilter === 'All Status' || statusFilter === 'Stored') &&
             (r.id.toLowerCase().includes(searchTerm.toLowerCase()) || r.supervisorName.toLowerCase().includes(searchTerm.toLowerCase()) || r.cubeNumber.toLowerCase().includes(searchTerm.toLowerCase()))).map(record => (
-            <div key={record.id} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row gap-6">
+            <div key={record.id} className="bg-white/70 backdrop-blur-lg rounded-2xl shadow-[0_8px_30px_rgba(80,50,20,0.06)] border border-white/80 p-6 flex flex-col md:flex-row gap-6">
               <div className="flex-1 space-y-4">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="bg-[#ea580c] p-3 rounded-xl text-white">
+                    <div className="bg-[#F28C28]/10 text-[#E47715] p-3 rounded-xl">
                       <div className="w-6 h-6 border-2 border-white rounded-sm flex items-center justify-center"><div className="w-2 h-2 border-[1px] border-white rounded-[1px]"></div></div>
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-slate-800">Material Recovery Facility - {record.id.slice(-5)}</h3>
+                      <h3 className="text-xl font-bold text-[#27313B]">Material Recovery Facility - {record.id.slice(-5)}</h3>
                       <p className="text-gray-500 text-sm">Cube #{record.cubeNumber}</p>
                     </div>
                   </div>
-                  <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
+                  <span className="bg-[#FFF3E0] text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
                     {t('supervisor.stored')}
                   </span>
                 </div>
@@ -453,14 +453,14 @@ const WealthCenter = () => {
                     <User className="text-blue-500" size={20} />
                     <div>
                       <p className="text-xs text-gray-500">{t('supervisor.supervisor')}</p>
-                      <p className="font-semibold text-slate-800">{record.supervisorName}</p>
+                      <p className="font-semibold text-[#27313B]">{record.supervisorName}</p>
                     </div>
                   </div>
                   <div className="bg-purple-50/50 p-4 rounded-xl border border-purple-100 flex items-center gap-3">
                     <Phone className="text-purple-500" size={20} />
                     <div>
                       <p className="text-xs text-gray-500">{t('supervisor.contact')}</p>
-                      <p className="font-semibold text-slate-800">{record.contactNumber}</p>
+                      <p className="font-semibold text-[#27313B]">{record.contactNumber}</p>
                     </div>
                   </div>
                 </div>
@@ -481,20 +481,20 @@ const WealthCenter = () => {
 
           {records.filter(r => (statusFilter === 'All Status' || statusFilter === 'Completed') && 
             (r.agencyName.toLowerCase().includes(searchTerm.toLowerCase()) || r.material.toLowerCase().includes(searchTerm.toLowerCase()))).map(record => (
-            <div key={record.id} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div key={record.id} className="bg-white/70 backdrop-blur-lg rounded-2xl shadow-[0_8px_30px_rgba(80,50,20,0.06)] border border-white/80 p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div className="flex items-center gap-4">
-                <div className="bg-[#10b981] p-3 rounded-xl text-white">
+                <div className="bg-[#F28C28]/10 text-[#E47715] p-3 rounded-xl">
                   <div className="w-6 h-6 border-2 border-white rounded-sm flex items-center justify-center text-xs">A</div>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-slate-800">{record.agencyName} - {record.material}</h3>
+                  <h3 className="text-xl font-bold text-[#27313B]">{record.agencyName} - {record.material}</h3>
                   <p className="text-gray-500 text-sm">
                     {record.weight} KG @ ₹{record.rate}/KG — Total: ₹{record.total}
                   </p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <span className="bg-green-100 text-green-700 px-4 py-1.5 rounded-full text-xs font-bold">
+                <span className="bg-[#FFF3E0] text-green-700 px-4 py-1.5 rounded-full text-xs font-bold">
                   Completed
                 </span>
                 <button 
@@ -541,7 +541,7 @@ const WealthCenter = () => {
                   type="text" 
                   value={agencyName}
                   onChange={e => setAgencyName(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ea580c] bg-white"
+                  className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F2A65A] bg-white"
                 />
               </div>
 
@@ -552,7 +552,7 @@ const WealthCenter = () => {
                 <select 
                   value={material}
                   onChange={e => setMaterial(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ea580c] bg-white appearance-none"
+                  className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F2A65A] bg-white appearance-none"
                 >
                   <option value="">{t('supervisor.selectMaterial')}</option>
                   <option value="Plastic">Plastic</option>
@@ -569,7 +569,7 @@ const WealthCenter = () => {
                   type="number" 
                   value={weight}
                   onChange={e => setWeight(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ea580c] bg-white"
+                  className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F2A65A] bg-white"
                 />
               </div>
 
@@ -581,12 +581,12 @@ const WealthCenter = () => {
                   type="number" 
                   value={rate}
                   onChange={e => setRate(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ea580c] bg-white"
+                  className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F2A65A] bg-white"
                 />
               </div>
 
-              <div className="mt-6 bg-green-50 border border-green-200 rounded-xl p-4 flex items-center gap-2 text-green-800 font-medium">
-                <IndianRupee size={18} className="text-green-600" /> 
+              <div className="mt-6 bg-[#FFF8F2] border border-[#F28C28]/15 rounded-xl p-4 flex items-center gap-2 text-green-800 font-medium">
+                <IndianRupee size={18} className="text-[#E47715]" /> 
                 {t('supervisor.total')}: ₹ {total}
               </div>
             </div>
@@ -606,7 +606,7 @@ const WealthCenter = () => {
               </button>
               <button 
                 onClick={handleSubmit}
-                className="bg-[#ea580c] text-white px-5 py-2.5 rounded-xl font-semibold shadow-sm hover:bg-orange-600 transition-colors"
+                className="bg-gradient-to-br from-[#E47715] to-[#F2A65A] text-white shadow-[0_5px_15px_rgba(228,119,21,0.18)] px-5 py-2.5 rounded-xl font-semibold shadow-sm hover:opacity-90 active:opacity-100 transition-colors"
               >
                 {t('supervisor.submitRecord')}
               </button>
@@ -619,7 +619,7 @@ const WealthCenter = () => {
       {isAddRecordModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
           <div className="bg-white rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-            <div className="bg-gradient-to-r from-[#ea580c] to-[#e11d48] p-4 flex justify-between items-center text-white">
+            <div className="bg-[#FFF7EF] p-4 flex justify-between items-center text-[#8A4D18] border-b border-[#F28C28]/25">
               <h2 className="text-xl font-bold">
                 {activeTab === 'MCC' ? t('supervisor.mccAddRecordTitle') : t('supervisor.mrfAddRecordTitle')}
               </h2>
@@ -649,7 +649,7 @@ const WealthCenter = () => {
                   type="text" 
                   value={addRecordSupervisor}
                   onChange={(e) => setAddRecordSupervisor(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ea580c] bg-white"
+                  className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F2A65A] bg-white"
                 />
               </div>
 
@@ -664,7 +664,7 @@ const WealthCenter = () => {
                     const val = e.target.value.replace(/\D/g, '');
                     if (val.length <= 10) setAddRecordContact(val);
                   }}
-                  className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ea580c] bg-white"
+                  className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F2A65A] bg-white"
                 />
               </div>
 
@@ -675,7 +675,7 @@ const WealthCenter = () => {
                 <select 
                   value={addRecordCube}
                   onChange={(e) => setAddRecordCube(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ea580c] bg-white appearance-none"
+                  className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F2A65A] bg-white appearance-none"
                 >
                   <option value="">{t('supervisor.selectCubeNumber')}</option>
                   <option value="1">Cube 1</option>
@@ -718,7 +718,7 @@ const WealthCenter = () => {
               </button>
               <button 
                 onClick={handleAddRecordSubmit}
-                className="bg-[#ea580c] text-white px-5 py-2.5 rounded-xl font-semibold shadow-sm hover:bg-orange-600 transition-colors"
+                className="bg-gradient-to-br from-[#E47715] to-[#F2A65A] text-white shadow-[0_5px_15px_rgba(228,119,21,0.18)] px-5 py-2.5 rounded-xl font-semibold shadow-sm hover:opacity-90 active:opacity-100 transition-colors"
               >
                 {t('supervisor.submitRecord')}
               </button>
@@ -731,3 +731,10 @@ const WealthCenter = () => {
 };
 
 export default WealthCenter;
+
+
+
+
+
+
+

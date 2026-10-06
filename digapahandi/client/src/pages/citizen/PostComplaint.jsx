@@ -81,7 +81,7 @@ const PostComplaint = () => {
   return (
     <div className="max-w-7xl mx-auto space-y-6">
       {/* Header Banner */}
-      <div className="bg-[#0a8459] rounded-2xl p-6 sm:p-8 text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-md">
+      <div className="bg-white/70 backdrop-blur-lg rounded-2xl p-6 sm:p-8 text-[#27313B] border border-white/80 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-md">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold mb-2 drop-shadow-sm">Post a Complaint</h1>
           <p className="text-sm sm:text-base opacity-90 max-w-2xl">
@@ -89,7 +89,7 @@ const PostComplaint = () => {
           </p>
         </div>
         {!isCameraOpen && !capturedImage && (
-          <button onClick={startCamera} className="bg-white text-[#0a8459] px-6 py-2.5 rounded-xl font-semibold flex items-center gap-2 hover:bg-slate-50 transition-colors shadow-sm shrink-0">
+          <button onClick={startCamera} className="bg-white text-[#E47715] px-6 py-2.5 rounded-xl font-semibold flex items-center gap-2 hover:bg-slate-50 transition-colors shadow-sm shrink-0">
             <Camera size={18} />
             Open Camera
           </button>
@@ -100,7 +100,7 @@ const PostComplaint = () => {
       {(isCameraOpen || capturedImage) && (
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-[#27313B]">
               {isCameraOpen ? 'Live Camera' : 'Complaint Details'}
             </h2>
             <button onClick={() => { stopCamera(); setCapturedImage(null); }} className="text-gray-500 hover:bg-gray-100 p-2 rounded-full">
@@ -153,7 +153,7 @@ const PostComplaint = () => {
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
                     placeholder="Enter landmark or street" 
-                    className="w-full p-3 border border-gray-300 rounded-lg outline-none focus:border-[#0a8459] focus:ring-1 focus:ring-[#0a8459]"
+                    className="w-full p-3 border border-gray-300 rounded-lg outline-none focus:border-[#F2A65A] focus:ring-1 focus:ring-[#F2A65A]"
                   />
                 </div>
                 <div>
@@ -164,10 +164,10 @@ const PostComplaint = () => {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Describe the issue..." 
-                    className="w-full p-3 border border-gray-300 rounded-lg outline-none focus:border-[#0a8459] focus:ring-1 focus:ring-[#0a8459]"
+                    className="w-full p-3 border border-gray-300 rounded-lg outline-none focus:border-[#F2A65A] focus:ring-1 focus:ring-[#F2A65A]"
                   ></textarea>
                 </div>
-                <button type="submit" className="w-full bg-[#0a8459] text-white py-3.5 rounded-lg font-bold shadow-md hover:bg-[#076846] transition-colors flex items-center justify-center gap-2 mt-2">
+                <button type="submit" className="w-full bg-gradient-to-br from-[#E47715] to-[#F2A65A] text-white shadow-[0_5px_15px_rgba(228,119,21,0.18)] py-3.5 rounded-lg font-bold shadow-md hover:bg-[#076846] transition-colors flex items-center justify-center gap-2 mt-2">
                   <Check size={18} /> Submit Complaint
                 </button>
               </div>
@@ -179,18 +179,18 @@ const PostComplaint = () => {
       {/* Complaint Summary Area */}
       {!isCameraOpen && !capturedImage && (
         <div>
-          <h2 className="text-xl font-bold text-slate-800 mb-4">Recent Complaints</h2>
+          <h2 className="text-xl font-bold text-[#27313B] mb-4">Recent Complaints</h2>
           
           {complaints.length === 0 ? (
             <div className="border-2 border-dashed border-gray-300 rounded-2xl bg-white p-12 flex flex-col items-center justify-center text-center min-h-[300px]">
-              <div className="text-emerald-500 mb-4 bg-emerald-50 p-4 rounded-full">
+              <div className="text-[#E47715] mb-4 bg-[#FFF8F2] p-4 rounded-full">
                 <Camera size={40} />
               </div>
-              <h3 className="text-lg font-bold text-slate-800 mb-2">No complaints submitted yet</h3>
+              <h3 className="text-lg font-bold text-[#27313B] mb-2">No complaints submitted yet</h3>
               <p className="text-slate-500 max-w-sm mb-6">
                 Capture an image and post your first complaint to help keep the environment clean.
               </p>
-              <button onClick={startCamera} className="bg-[#0a8459] text-white px-6 py-2.5 rounded-xl font-semibold shadow-sm hover:bg-[#076846] transition-colors">
+              <button onClick={startCamera} className="bg-gradient-to-br from-[#E47715] to-[#F2A65A] text-white shadow-[0_5px_15px_rgba(228,119,21,0.18)] px-6 py-2.5 rounded-xl font-semibold shadow-sm hover:bg-[#076846] transition-colors">
                 Open Camera
               </button>
             </div>
@@ -203,7 +203,7 @@ const PostComplaint = () => {
                   </div>
                   <div className="p-4 space-y-2">
                     <div className="flex justify-between items-start">
-                      <h3 className="font-bold text-slate-800 line-clamp-1">{comp.location}</h3>
+                      <h3 className="font-bold text-[#27313B] line-clamp-1">{comp.location}</h3>
                       <span className="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide">
                         {comp.status}
                       </span>
@@ -222,3 +222,10 @@ const PostComplaint = () => {
 };
 
 export default PostComplaint;
+
+
+
+
+
+
+

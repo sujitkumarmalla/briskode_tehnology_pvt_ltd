@@ -79,7 +79,7 @@ const Vehicles = () => {
   return (
     <div className="max-w-7xl mx-auto space-y-6 pb-10">
       {/* Header */}
-      <div className="bg-gradient-to-r from-emerald-500 to-green-500 rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-white shadow-md">
+      <div className="bg-white/70 backdrop-blur-lg rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-white shadow-md">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">Vehicle Management 🚛</h1>
           <p className="text-emerald-100 text-sm mt-1">Fleet monitoring • Live tracking • Operational status</p>
@@ -103,21 +103,21 @@ const Vehicles = () => {
             <Truck size={24} />
           </div>
         </div>
-        <div className="bg-gradient-to-br from-emerald-400 to-green-600 rounded-2xl p-6 text-white shadow-md relative overflow-hidden">
+        <div className="bg-white/70 backdrop-blur-lg rounded-2xl p-6 text-[#27313B] shadow-[0_8px_30px_rgba(80,50,20,0.06)] border border-white/80 relative overflow-hidden">
           <p className="text-sm font-medium opacity-90 mb-2">Active</p>
           <h2 className="text-4xl font-bold">{vehicles.filter(v => v.status === 'running' || v.status === 'idle').length}</h2>
           <div className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 p-3 rounded-2xl">
             <CheckCircle size={24} />
           </div>
         </div>
-        <div className="bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl p-6 text-white shadow-md relative overflow-hidden">
+        <div className="bg-white/70 backdrop-blur-lg rounded-2xl p-6 text-[#27313B] shadow-[0_8px_30px_rgba(80,50,20,0.06)] border border-white/80 relative overflow-hidden">
           <p className="text-sm font-medium opacity-90 mb-2">Inactive</p>
           <h2 className="text-4xl font-bold">{vehicles.filter(v => v.status === 'stopped').length}</h2>
           <div className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 p-3 rounded-2xl">
             <XCircle size={24} />
           </div>
         </div>
-        <div className="bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl p-6 text-white shadow-md relative overflow-hidden">
+        <div className="bg-white/70 backdrop-blur-lg rounded-2xl p-6 text-[#27313B] shadow-[0_8px_30px_rgba(80,50,20,0.06)] border border-white/80 relative overflow-hidden">
           <p className="text-sm font-medium opacity-90 mb-2">Maintenance</p>
           <h2 className="text-4xl font-bold">0</h2>
           <div className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 p-3 rounded-2xl">
@@ -138,11 +138,11 @@ const Vehicles = () => {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-white/70 backdrop-blur-lg rounded-2xl shadow-[0_8px_30px_rgba(80,50,20,0.06)] border border-white/80 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-[#1e293b] text-white">
+              <tr className="bg-[#FFF7EF] text-[#8A4D18]">
                 <th className="p-4 text-sm font-semibold whitespace-nowrap">Vehicle No</th>
                 <th className="p-4 text-sm font-semibold">Ward</th>
                 <th className="p-4 text-sm font-semibold">Speed</th>
@@ -155,26 +155,26 @@ const Vehicles = () => {
             </thead>
             <tbody>
               {filteredVehicles.map((vehicle, index) => (
-                <tr key={vehicle.id} className={`border-b border-gray-100 hover:bg-gray-50 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}>
-                  <td className="p-4 font-bold text-slate-800">{vehicle.vehicleNo}</td>
+                <tr key={vehicle.id} className={`border-b border-[#F28C28]/15 hover:bg-[#FFF4E9] ${index % 2 === 0 ? 'bg-white' : 'bg-[#FFFBF7]'}`}>
+                  <td className="p-4 font-bold text-[#27313B]">{vehicle.vehicleNo}</td>
                   <td className="p-4 text-sm text-slate-500 max-w-xs truncate" title={vehicle.ward}>{vehicle.ward}</td>
                   <td className="p-4 text-sm text-slate-600 whitespace-nowrap">{vehicle.speed} km/h</td>
                   <td className="p-4 text-sm font-medium text-slate-700">
                     {vehicle.signal}
                   </td>
                   <td className="p-4">
-                    <span className={`text-xs font-bold ${vehicle.ignition === 'ON' ? 'text-green-600' : 'text-red-500'}`}>
+                    <span className={`text-xs font-bold ${vehicle.ignition === 'ON' ? 'text-[#E47715]' : 'text-red-500'}`}>
                       {vehicle.ignition}
                     </span>
                   </td>
                   <td className="p-4">
                     <span className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1.5 w-fit ${
-                      vehicle.status === 'running' ? 'bg-emerald-100 text-emerald-700' : 
+                      vehicle.status === 'running' ? 'bg-[#FFF3E0] text-emerald-700' : 
                       vehicle.status === 'idle' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'
                     }`}>
                       <span className={`w-1.5 h-1.5 rounded-full ${
-                        vehicle.status === 'running' ? 'bg-emerald-500' : 
-                        vehicle.status === 'idle' ? 'bg-amber-500' : 'bg-red-500'
+                        vehicle.status === 'running' ? 'bg-[#F2A65A]' : 
+                        vehicle.status === 'idle' ? 'bg-[#F2A65A]' : 'bg-red-500'
                       }`}></span>
                       {vehicle.status}
                     </span>
@@ -183,7 +183,7 @@ const Vehicles = () => {
                   <td className="p-4 text-center">
                     <button 
                       onClick={() => navigate('/supervisor/tracking')}
-                      className="bg-[#0a8459] hover:bg-[#086a47] text-white px-4 py-1.5 rounded-md text-sm font-medium transition-colors"
+                      className="bg-gradient-to-br from-[#E47715] to-[#F2A65A] text-white hover:opacity-90 active:opacity-100 px-4 py-1.5 rounded-md text-sm font-medium transition-colors"
                     >
                       View
                     </button>
@@ -201,3 +201,10 @@ const Vehicles = () => {
   );
 };
 export default Vehicles;
+
+
+
+
+
+
+

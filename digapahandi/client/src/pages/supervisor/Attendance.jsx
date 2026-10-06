@@ -274,7 +274,7 @@ const Attendance = () => {
       {/* Header */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-[#0a8459] mb-1">My Attendance</h1>
+          <h1 className="text-2xl font-bold text-[#E47715] mb-1">My Attendance</h1>
           <p className="text-sm text-slate-500">Track your personal attendance records & check-in</p>
         </div>
         <div className="flex flex-wrap gap-3 items-center justify-end">
@@ -298,15 +298,15 @@ const Attendance = () => {
         
         <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex-1">
-            <h2 className="text-lg font-bold text-slate-800 mb-2 flex items-center gap-2">
-              <MapPin className="text-[#0a8459]" size={20} /> Office Geofence Tracking
+            <h2 className="text-lg font-bold text-[#27313B] mb-2 flex items-center gap-2">
+              <MapPin className="text-[#E47715]" size={20} /> Office Geofence Tracking
             </h2>
             <p className="text-sm text-slate-500 mb-4 max-w-md">
               You must be within <strong>50 meters</strong> of Briskode Technology Pvt. Ltd. to mark your attendance.
             </p>
             {locationStatus && (
               <div className={`text-sm font-semibold flex items-center gap-2 p-3 rounded-lg ${
-                locationStatus.includes('Successful') ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' :
+                locationStatus.includes('Successful') ? 'bg-[#FFF8F2] text-emerald-700 border border-emerald-100' :
                 locationStatus.includes('Verifying') ? 'bg-blue-50 text-blue-700 border border-blue-100' :
                 'bg-red-50 text-red-700 border border-red-100'
               }`}>
@@ -321,7 +321,7 @@ const Attendance = () => {
             <div className="text-center w-full mb-2">
               <p className="text-xs text-slate-500 font-medium uppercase tracking-wider mb-1">Today's Status</p>
               <div className="flex justify-center gap-4 text-sm font-bold text-slate-700">
-                <div className="flex flex-col items-center"><span className="text-emerald-600">{checkInTime}</span><span className="text-[10px] text-slate-400">IN</span></div>
+                <div className="flex flex-col items-center"><span className="text-[#E47715]">{checkInTime}</span><span className="text-[10px] text-slate-400">IN</span></div>
                 <div className="w-px bg-gray-200"></div>
                 <div className="flex flex-col items-center"><span className="text-amber-600">{checkOutTime}</span><span className="text-[10px] text-slate-400">OUT</span></div>
               </div>
@@ -330,14 +330,14 @@ const Attendance = () => {
               <button 
                 onClick={() => handleAttendanceAction('checkin')}
                 disabled={isProcessing || checkInTime !== '-'}
-                className="flex-1 bg-[#0a8459] hover:bg-[#076846] disabled:bg-gray-300 disabled:cursor-not-allowed text-white py-2.5 rounded-lg text-sm font-bold transition-colors flex items-center justify-center gap-2 shadow-sm"
+                className="flex-1 bg-gradient-to-br from-[#E47715] to-[#F2A65A] text-white disabled:opacity-50 disabled:cursor-not-allowed text-white py-2.5 rounded-lg text-sm font-bold transition-colors flex items-center justify-center gap-2 shadow-sm"
               >
                 <Clock size={16} /> Check In
               </button>
               <button 
                 onClick={() => handleAttendanceAction('checkout')}
                 disabled={isProcessing || checkInTime === '-' || checkOutTime !== '-'}
-                className="flex-1 bg-amber-500 hover:bg-amber-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white py-2.5 rounded-lg text-sm font-bold transition-colors flex items-center justify-center gap-2 shadow-sm"
+                className="flex-1 bg-[#F2A65A] hover:opacity-90 active:opacity-100 disabled:bg-gray-300 disabled:cursor-not-allowed text-white py-2.5 rounded-lg text-sm font-bold transition-colors flex items-center justify-center gap-2 shadow-sm"
               >
                 <Clock size={16} /> Check Out
               </button>
@@ -354,16 +354,16 @@ const Attendance = () => {
             <span className="text-sm font-semibold opacity-90">Total Days</span>
             <Calendar size={18} className="opacity-70" />
           </div>
-          <h2 className="text-3xl font-bold">{totalDays}</h2>
+          <h2 className="text-3xl font-bold text-[#D96B0B]">{totalDays}</h2>
         </div>
 
         {/* Present */}
-        <div className="bg-[#10b981] rounded-xl p-5 text-white shadow-sm relative overflow-hidden">
+        <div className="bg-white/70 backdrop-blur-lg rounded-xl p-5 text-[#27313B] shadow-[0_8px_30px_rgba(80,50,20,0.06)] border border-white/80 shadow-sm relative overflow-hidden">
           <div className="flex justify-between items-start mb-2">
             <span className="text-sm font-semibold opacity-90">Days Present</span>
             <CheckCircle2 size={18} className="opacity-70" />
           </div>
-          <h2 className="text-3xl font-bold">{presentCount}</h2>
+          <h2 className="text-3xl font-bold text-[#D96B0B]">{presentCount}</h2>
         </div>
 
         {/* Absent */}
@@ -372,7 +372,7 @@ const Attendance = () => {
             <span className="text-sm font-semibold opacity-90">Days Absent</span>
             <XCircle size={18} className="opacity-70" />
           </div>
-          <h2 className="text-3xl font-bold">{absentCount}</h2>
+          <h2 className="text-3xl font-bold text-[#D96B0B]">{absentCount}</h2>
         </div>
 
         {/* On Leave */}
@@ -381,7 +381,7 @@ const Attendance = () => {
             <span className="text-sm font-semibold opacity-90">On Leave</span>
             <Palmtree size={18} className="opacity-70" />
           </div>
-          <h2 className="text-3xl font-bold">{leaveCount}</h2>
+          <h2 className="text-3xl font-bold text-[#D96B0B]">{leaveCount}</h2>
         </div>
 
         {/* Rate */}
@@ -390,19 +390,19 @@ const Attendance = () => {
             <span className="text-sm font-semibold opacity-90">Monthly Rate</span>
             <BarChart2 size={18} className="opacity-70" />
           </div>
-          <h2 className="text-3xl font-bold">{attendanceRate}%</h2>
+          <h2 className="text-3xl font-bold text-[#D96B0B]">{attendanceRate}%</h2>
         </div>
       </div>
 
       {/* Recent History Area */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden min-h-[300px]">
-        <div className="p-5 border-b border-gray-100 flex justify-between items-center bg-slate-50">
-          <h3 className="text-lg font-bold text-slate-800">Recent Attendance History (Last 7 Days)</h3>
+      <div className="bg-white/70 backdrop-blur-lg rounded-2xl shadow-[0_8px_30px_rgba(80,50,20,0.06)] border border-white/80 overflow-hidden min-h-[300px]">
+        <div className="p-5 border-b border-[#F28C28]/15 flex justify-between items-center bg-[#FFFBF7]">
+          <h3 className="text-lg font-bold text-[#262626]">Recent Attendance History (Last 7 Days)</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-white text-slate-500 border-b border-gray-100">
+              <tr className="bg-[#FFF7EF] text-[#8A4D18] border-b border-[#F2A65A]">
                 <th className="p-4 text-xs font-bold uppercase tracking-wider">Date</th>
                 <th className="p-4 text-xs font-bold uppercase tracking-wider">Status</th>
                 <th className="p-4 text-xs font-bold uppercase tracking-wider">Check-In</th>
@@ -412,28 +412,28 @@ const Attendance = () => {
               </tr>
             </thead>
             <tbody>
-              <tr className="bg-emerald-50/50 text-slate-500 border-b border-gray-200">
-                <th className="p-4 text-xs font-bold uppercase tracking-wider text-[#0a8459]">Today ({dateString})</th>
+              <tr className="bg-[#FFF8F2]/50 text-slate-500 border-b border-gray-200">
+                <th className="p-4 text-xs font-bold uppercase tracking-wider text-[#E47715]">Today ({dateString})</th>
                 <th className="p-4 text-xs font-bold uppercase tracking-wider">
                   <span className={`px-2.5 py-1 rounded text-xs font-bold border ${
-                    todayStatus === 'Present' ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-red-50 text-red-600 border-red-100'
+                    todayStatus === 'Present' ? 'bg-[#FFF3E0] text-emerald-700 border-[#F28C28]/15' : 'bg-red-50 text-red-600 border-red-100'
                   }`}>
                     {todayStatus}
                   </span>
                 </th>
-                <th className="p-4 text-sm font-medium text-slate-800">{checkInTime}</th>
-                <th className="p-4 text-sm font-medium text-slate-800">{checkOutTime}</th>
+                <th className="p-4 text-sm font-medium text-[#27313B]">{checkInTime}</th>
+                <th className="p-4 text-sm font-medium text-[#27313B]">{checkOutTime}</th>
                 <th className="p-4 text-sm text-slate-600">{todayStatus === 'Present' ? myProfile.location : '-'}</th>
                 <th className="p-4 text-sm text-slate-600">{checkInTime !== '-' ? 'Logged' : '-'}</th>
               </tr>
               {history.map((record, i) => (
                 <tr key={i} className={`border-b border-gray-50 hover:bg-slate-50 transition-colors`}>
-                  <td className="p-4 font-bold text-slate-800 text-sm">
+                  <td className="p-4 font-bold text-[#27313B] text-sm">
                     {record.date}
                   </td>
                   <td className="p-4">
                     <span className={`px-2.5 py-1 rounded text-xs font-bold border ${
-                      record.status === 'Present' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
+                      record.status === 'Present' ? 'bg-[#FFF8F2] text-[#E47715] border-emerald-100' :
                       record.status === 'Weekly Off' ? 'bg-blue-50 text-blue-600 border-blue-100' :
                       'bg-red-50 text-red-600 border-red-100'
                     }`}>
@@ -464,3 +464,10 @@ const Attendance = () => {
 };
 
 export default Attendance;
+
+
+
+
+
+
+
