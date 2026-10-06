@@ -99,7 +99,7 @@ export const checkInAppointment = async (req, res) => {
 
     // Generate daily token number (e.g., A-001, A-002)
     const today = new Date();
-    today.setHours(0,0,0,0);
+    today.setHours(0, 0, 0, 0);
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -143,7 +143,7 @@ export const updateAppointmentStatus = async (req, res) => {
     appointment.status = status;
     await appointment.save();
 
-    return res.status(200).json({ success: true, message: `Status updated to ${status}`, appointment });
+    return res.status(200).json({ success: true, message: `Status are updated to ${status}`, appointment });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
