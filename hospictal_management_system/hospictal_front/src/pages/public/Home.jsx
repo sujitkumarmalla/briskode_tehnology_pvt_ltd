@@ -411,13 +411,13 @@ export default function Home() {
           {/* Circular Navigation Arrow Buttons matching reference screenshot */}
           <button
             onClick={() => setCurrentSlide((prev) => (prev === 0 ? heroSlides.length - 1 : prev - 1))}
-            className="absolute left-6 z-30 w-11 h-11 bg-white text-slate-900 rounded-full flex items-center justify-center shadow-2xl border border-white/80 transition-all transform hover:scale-110 cursor-pointer"
+            className="hidden md:flex absolute left-6 z-30 w-11 h-11 bg-white text-slate-900 rounded-full items-center justify-center shadow-2xl border border-white/80 transition-all transform hover:scale-110 cursor-pointer"
           >
             <ChevronLeft className="w-6 h-6 stroke-[2.5]" />
           </button>
           <button
             onClick={() => setCurrentSlide((prev) => (prev + 1) % heroSlides.length)}
-            className="absolute right-6 z-30 w-11 h-11 bg-white text-slate-900 rounded-full flex items-center justify-center shadow-2xl border border-white/80 transition-all transform hover:scale-110 cursor-pointer"
+            className="hidden md:flex absolute right-6 z-30 w-11 h-11 bg-white text-slate-900 rounded-full items-center justify-center shadow-2xl border border-white/80 transition-all transform hover:scale-110 cursor-pointer"
           >
             <ChevronRight className="w-6 h-6 stroke-[2.5]" />
           </button>
@@ -764,7 +764,7 @@ export default function Home() {
                 <p className="text-xs text-slate-500 mt-1">Real experiences shared by patients across Odisha</p>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="hidden md:flex items-center gap-2">
                 <button
                   onClick={() => setReviewIndex((prev) => (prev === 0 ? odishaReviews.length - 1 : prev - 1))}
                   className="p-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 transition-colors shadow-sm cursor-pointer"

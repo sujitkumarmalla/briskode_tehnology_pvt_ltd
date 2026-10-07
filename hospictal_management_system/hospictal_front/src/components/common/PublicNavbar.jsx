@@ -47,44 +47,30 @@ export default function PublicNavbar() {
     <>
       {/* 1. TOP EMERGENCY & LOCATION ANNOUNCEMENT BAR */}
       <div className="bg-[#10223e] text-white text-xs py-2 px-4 sm:px-8 flex flex-col md:flex-row items-center justify-between gap-2 border-b border-blue-900/50">
-        <div className="flex flex-wrap items-center gap-4">
-          <a
-            href="tel:+9106742740000"
-            className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-extrabold px-3 py-1 rounded-full text-[11px] transition-colors shadow-sm"
-          >
-            <Phone className="w-3.5 h-3.5" /> 24/7 EMERGENCY: +91 0674 2 740 000
-          </a>
-          <span className="flex items-center gap-1.5 text-slate-300 font-medium text-[11px]">
-            <MapPin className="w-3.5 h-3.5 text-blue-400" /> OMFED Square, Patia, Bhubaneswar, Odisha 751024
-          </span>
-        </div>
-
-        <div className="flex items-center gap-4 text-slate-400">
-          <span className="text-[10px] uppercase font-bold text-slate-500 hidden lg:inline">Social Media:</span>
-          <div className="flex items-center gap-2.5">
-            <a href="#" className="hover:text-white transition-colors"><Globe className="w-3.5 h-3.5" /></a>
-            <a href="#" className="hover:text-white transition-colors"><Share2 className="w-3.5 h-3.5" /></a>
-            <a href="#" className="hover:text-white transition-colors"><Mail className="w-3.5 h-3.5" /></a>
+        <Link to="/" className="flex items-center gap-3 group">
+          <img
+            src="/briskode_logo.png"
+            alt="Briskode Hospital Logo"
+            className="h-10 sm:h-12 bg-white p-1 rounded-xl shadow-md group-hover:scale-105 transition-transform object-contain"
+          />
+          {/* Vertical Line Divider */}
+          <div className="h-8 w-0.5 bg-blue-400/40 hidden sm:block"></div>
+          <div className="hidden sm:block">
+            <span className="text-[10px] font-black text-white uppercase tracking-wider block">OMFED SQUARE, PATIA</span>
+            <p className="text-[9px] text-teal-300 font-extrabold italic">BHUBANESWAR, ODISHA</p>
           </div>
-        </div>
+        </Link>
       </div>
 
       {/* 2. DEEP ROYAL BLUE NAVBAR (Matching screenshot media_1788330329191.png) */}
       <header className="sticky top-0 z-40 bg-[#1b365d] text-white shadow-xl border-b border-blue-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4">
-          {/* Logo & Unique Hospital Emblem Image */}
-          <Link to="/" className="flex items-center gap-3 group">
-            <img
-              src="/briskode_logo.png"
-              alt="Briskode Hospital Logo"
-              className="h-12 sm:h-14 bg-white p-1.5 rounded-2xl shadow-md group-hover:scale-105 transition-transform object-contain"
-            />
-            {/* Vertical Line Divider */}
-            <div className="h-10 w-0.5 bg-blue-400/40 hidden sm:block"></div>
-            <div className="hidden sm:block">
-              <span className="text-xs font-black text-white uppercase tracking-wider block">OMFED SQUARE, PATIA</span>
-              <p className="text-[10px] text-teal-300 font-extrabold italic">BHUBANESWAR, ODISHA</p>
-            </div>
+          {/* Login Button replacing the Logo */}
+          <Link
+            to="/login"
+            className="flex items-center gap-1.5 bg-blue-950/80 hover:bg-blue-900 text-blue-200 font-bold text-sm px-4 py-2.5 rounded-xl border border-blue-700/60 transition-all shadow-sm"
+          >
+            <Lock className="w-4 h-4 text-blue-400" /> Login
           </Link>
 
           {/* Navigation Links & Sub-Pill Filter Buttons (Matching screenshot) */}
@@ -165,12 +151,7 @@ export default function PublicNavbar() {
 
           {/* Action Buttons: Glowing Book Appointment & Staff Login */}
           <div className="flex items-center gap-2.5">
-            <Link
-              to="/login"
-              className="hidden sm:flex items-center gap-1.5 bg-blue-950/80 hover:bg-blue-900 text-blue-200 font-bold text-xs px-3.5 py-2.5 rounded-xl border border-blue-700/60 transition-all shadow-sm"
-            >
-              <Lock className="w-3.5 h-3.5 text-blue-400" /> Login
-            </Link>
+
 
             {/* Glowing Gradient Teal/Green Button matching screenshot */}
             <Link

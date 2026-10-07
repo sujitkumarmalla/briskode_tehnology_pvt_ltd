@@ -42,7 +42,7 @@ function Navbar() {
         <div className="flex justify-between items-center h-14">
           
           {/* Logo & Brand Name */}
-          <Link to="/" className="flex items-center space-x-3 group">
+          <Link to="/" className="hidden lg:flex items-center space-x-3 group">
             <div className="relative w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-100 to-teal-50 border border-emerald-300/70 flex items-center justify-center overflow-hidden shadow-xs group-hover:scale-105 transition-transform duration-300">
               <img 
                 src={hospitalConfig.logo} 
@@ -107,9 +107,9 @@ function Navbar() {
               <div className="flex items-center space-x-2">
                 <Link
                   to="/admin"
-                  className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-extrabold text-emerald-950 bg-emerald-100 hover:bg-emerald-200 border border-emerald-300 shadow-xs transition-all"
+                  className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl text-xs font-extrabold text-white bg-emerald-700 hover:bg-emerald-600 shadow-md transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
                 >
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span className="w-2 h-2 rounded-full bg-emerald-300 animate-pulse"></span>
                   <span>Dashboard</span>
                 </Link>
                 <button
@@ -128,9 +128,9 @@ function Navbar() {
             ) : (
               <Link
                 to="/login"
-                className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-extrabold text-slate-800 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-800 border border-slate-200/80 shadow-xs transition-all hover:border-emerald-300"
+                className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl text-xs font-extrabold text-white bg-emerald-700 hover:bg-emerald-600 shadow-md transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
               >
-                <svg className="w-3.5 h-3.5 text-slate-500 group-hover:text-emerald-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <svg className="w-3.5 h-3.5 text-emerald-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
                 <span>Login</span>
@@ -139,21 +139,21 @@ function Navbar() {
           </div>
 
           {/* Mobile Login / Dashboard Button */}
-          <div className="flex lg:hidden items-center">
+          <div className="flex lg:hidden items-center w-full justify-center">
             {isAuthenticated ? (
               <Link
                 to="/admin"
-                className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-extrabold text-emerald-950 bg-emerald-100 hover:bg-emerald-200 border border-emerald-300 shadow-xs transition-all"
+                className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-extrabold text-white bg-emerald-700 hover:bg-emerald-600 shadow-md transition-all"
               >
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span className="w-2 h-2 rounded-full bg-emerald-300 animate-pulse"></span>
                 <span>Dashboard</span>
               </Link>
             ) : (
               <Link
                 to="/login"
-                className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-extrabold text-slate-800 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-800 border border-slate-200/80 shadow-xs transition-all hover:border-emerald-300"
+                className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-extrabold text-white bg-emerald-700 hover:bg-emerald-600 shadow-md transition-all"
               >
-                <svg className="w-3.5 h-3.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <svg className="w-3.5 h-3.5 text-emerald-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
                 <span>Login</span>
