@@ -202,7 +202,9 @@ app.post("/api/doctors", async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 });
-
+app.get("/", (req, res) => {
+  res.send("backend is running");
+})
 // Health check endpoint
 app.get("/api/health", (req, res) => {
   res.status(200).json({ status: "OK", message: "Hospital Management System Backend API Active", time: new Date() });
