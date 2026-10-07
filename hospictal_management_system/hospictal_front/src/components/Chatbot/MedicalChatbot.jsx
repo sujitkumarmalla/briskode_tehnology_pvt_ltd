@@ -248,7 +248,7 @@ function MedicalChatbot() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="hidden md:block fixed bottom-6 right-6 z-50">
       {/* Floating 100% Pure Circle Trigger Button: Compact Green Circle with Red + Icon */}
       {!isOpen && (
         <button

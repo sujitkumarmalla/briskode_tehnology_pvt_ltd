@@ -5,7 +5,7 @@ function FloatingWhatsApp() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 group">
+    <div className="hidden md:block fixed bottom-6 right-6 z-50 group">
       {/* Tooltip */}
       <span className="absolute bottom-16 right-0 bg-slate-900 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
         Chat with us on WhatsApp

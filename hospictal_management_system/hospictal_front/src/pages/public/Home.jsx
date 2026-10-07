@@ -906,7 +906,7 @@ export default function Home() {
       {/* 9. FLOATING 24/7 RED EMERGENCY CALL BUTTON */}
       <a
         href="tel:+9106742740000"
-        className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 bg-red-600 hover:bg-red-700 text-white font-extrabold text-xs px-5 py-3.5 rounded-full shadow-2xl border-2 border-white transition-all scale-105 hover:scale-110"
+        className="hidden md:flex fixed bottom-6 right-6 z-50 items-center gap-2.5 bg-red-600 hover:bg-red-700 text-white font-extrabold text-xs px-5 py-3.5 rounded-full shadow-2xl border-2 border-white transition-all scale-105 hover:scale-110"
       >
         <Phone className="w-5 h-5 animate-bounce" />
         <span>Emergency Helpline</span>
