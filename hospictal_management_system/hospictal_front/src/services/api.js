@@ -11,7 +11,7 @@ const api = axios.create({
     "Pragma": "no-cache",
     "Expires": "0"
   },
-  timeout: 10000
+  timeout: 60000 // Increased from 10000 to allow Render free tier to wake up
 });
 
 // Request Interceptor
